@@ -459,14 +459,14 @@ export default function Index() {
             {/* Icon/Font Selector */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {config.type === 'time' ? 'Font' : 'Icon'}
+                {config.type === 'time' ? 'Icon' : 'Icon'}
               </label>
               <div className="grid grid-cols-7 gap-2">
-                {(config.type === 'time' ? animalFonts : emojiIcons).map((icon) => (
+                {(config.type === 'time' ? timeBlockIcons : emojiIcons).map((icon) => (
                   <button
                     key={icon}
-                    onClick={() => setConfig(prev => ({ 
-                      ...prev, 
+                    onClick={() => setConfig(prev => ({
+                      ...prev,
                       emoji: icon,
                       ...(config.type === 'time' ? { font: icon } : {})
                     }))}
