@@ -16,12 +16,30 @@ export interface DemoResponse {
  */
 export interface WidgetData {
   id: string;
-  type: 'basic' | 'counter' | 'timer' | 'progress';
+  type: 'timeblock' | 'habit' | 'countdown' | 'progress';
   title: string;
   color: string;
   icon: string;
-  value: number;
-  target: number;
+  darkMode: boolean;
+
+  // TimeBlock specific
+  hours?: number;
+  minutes?: number;
+
+  // Habit/Wall Block specific
+  value?: number;
+  target?: number;
+  increment?: number;
+
+  // Countdown specific
+  countdownMinutes?: number;
+  countdownSeconds?: number;
+
+  // Progress specific
+  startDate?: string;
+  endDate?: string;
+  currentProgress?: number;
+
   lastUpdated: string;
 }
 
