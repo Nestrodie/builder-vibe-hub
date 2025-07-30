@@ -49,7 +49,7 @@ const colorOptions = [
 const iconOptions = ['🚀', '📚', '💪', '🎯', '⏰', '🌟', '💻', '🎨', '🏃‍♂️', '📈'];
 
 const widgetTypes = [
-  { id: 'basic', name: 'Basic Block', icon: Cube, description: 'Simple display widget' },
+  { id: 'basic', name: 'Basic Block', icon: Box, description: 'Simple display widget' },
   { id: 'counter', name: 'Counter', icon: Plus, description: 'Habit tracker with +/- controls' },
   { id: 'timer', name: 'Timer', icon: Timer, description: 'Countdown timer widget' },
   { id: 'progress', name: 'Progress', icon: TrendingUp, description: 'Progress bar with percentage' },
