@@ -24,17 +24,32 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type WidgetType = 'timeblock' | 'counter' | 'countdown' | 'progress';
+type WidgetType = 'timeblock' | 'habit' | 'countdown' | 'progress';
 
 interface WidgetConfig {
   type: WidgetType;
   title: string;
   color: string;
   icon: string;
-  size: 'small' | 'medium' | 'large';
-  value: number;
-  target: number;
-  increment: number;
+  darkMode: boolean;
+
+  // TimeBlock specific
+  hours?: number;
+  minutes?: number;
+
+  // Habit/Wall Block specific
+  value?: number;
+  target?: number;
+  increment?: number;
+
+  // Countdown specific
+  countdownMinutes?: number;
+  countdownSeconds?: number;
+
+  // Progress specific
+  startDate?: string;
+  endDate?: string;
+  currentProgress?: number;
 }
 
 const colorOptions = [
