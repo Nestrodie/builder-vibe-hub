@@ -762,7 +762,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm max-w-xs">
+    <div className="bg-white border-2 border-black rounded-lg overflow-hidden shadow-sm max-w-xs">
       {renderBlock()}
     </div>
   );
