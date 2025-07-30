@@ -573,113 +573,18 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
         return (
           <div className="relative w-full h-48 overflow-hidden" style={{
-            backgroundColor: transparentBg,
+            background: `linear-gradient(135deg, ${waveColor}40, ${waveColor}60)`,
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            {/* Animated wave layers */}
-            <div className="absolute inset-0">
-              <style>{`
-                @keyframes wave1 {
-                  0% { transform: translateX(0%) rotate(0deg); }
-                  50% { transform: translateX(-25%) rotate(180deg); }
-                  100% { transform: translateX(-50%) rotate(360deg); }
-                }
-                @keyframes wave2 {
-                  0% { transform: translateX(0%) rotate(0deg); }
-                  50% { transform: translateX(25%) rotate(-180deg); }
-                  100% { transform: translateX(50%) rotate(-360deg); }
-                }
-                @keyframes wave3 {
-                  0% { transform: translateX(0%) scaleY(1); }
-                  50% { transform: translateX(-15%) scaleY(1.1); }
-                  100% { transform: translateX(-30%) scaleY(1); }
-                }
-                @keyframes float1 {
-                  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
-                  50% { transform: translateY(-10px) scale(1.1); opacity: 0.9; }
-                }
-              `}</style>
-
-              {/* First wave layer */}
-              <div
-                className="absolute bottom-0 w-[150%] h-32"
-                style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}40 50%, ${waveColor}80 100%)`,
-                  clipPath: 'polygon(0 30%, 25% 25%, 50% 35%, 75% 25%, 100% 40%, 100% 100%, 0 100%)',
-                  animation: 'wave1 8s ease-in-out infinite',
-                  left: '-25%'
-                }}
-              />
-
-              {/* Second wave layer */}
-              <div
-                className="absolute bottom-0 w-[150%] h-28"
-                style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}30 50%, ${waveColor}60 100%)`,
-                  clipPath: 'polygon(0 50%, 30% 40%, 60% 55%, 90% 35%, 100% 45%, 100% 100%, 0 100%)',
-                  animation: 'wave2 12s ease-in-out infinite',
-                  left: '-25%'
-                }}
-              />
-
-              {/* Third wave layer */}
-              <div
-                className="absolute bottom-0 w-[130%] h-24"
-                style={{
-                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}20 60%, ${waveColor}40 100%)`,
-                  clipPath: 'polygon(0 60%, 20% 50%, 40% 65%, 70% 45%, 100% 55%, 100% 100%, 0 100%)',
-                  animation: 'wave3 6s ease-in-out infinite',
-                  left: '-15%'
-                }}
-              />
-            </div>
-
-            {/* Animated floating bubbles */}
-            <div className="absolute inset-0">
-              <div
-                className="absolute w-2 h-2 rounded-full"
-                style={{
-                  backgroundColor: `${waveColor}60`,
-                  top: '20%',
-                  left: '15%',
-                  animation: 'float1 3s ease-in-out infinite'
-                }}
-              />
-              <div
-                className="absolute w-1.5 h-1.5 rounded-full"
-                style={{
-                  backgroundColor: `${waveColor}40`,
-                  top: '60%',
-                  right: '20%',
-                  animation: 'float1 4s ease-in-out infinite 1s'
-                }}
-              />
-              <div
-                className="absolute w-1 h-1 rounded-full"
-                style={{
-                  backgroundColor: `${waveColor}50`,
-                  top: '40%',
-                  left: '70%',
-                  animation: 'float1 5s ease-in-out infinite 2s'
-                }}
-              />
-            </div>
-
             {/* Content layer */}
-            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4" style={{ color: textColor }}>
+            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4 text-black">
               <div className="text-lg font-mono font-bold mb-4">{displayTime}</div>
               <div className="text-sm font-medium mb-4">{config.title}</div>
 
               <div className="flex items-center justify-center">
                 <div className="relative">
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.9)',
-                      border: '2px solid rgba(0,0,0,0.1)'
-                    }}
-                  >
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center">
                     {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
                       <img
                         src={config.emoji}
@@ -690,15 +595,6 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       <div className="text-2xl">{config.emoji}</div>
                     )}
                   </div>
-
-                  <div
-                    className="absolute -left-1 top-6 w-3 h-3 rounded-full opacity-80"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}
-                  />
-                  <div
-                    className="absolute -right-1 top-6 w-3 h-3 rounded-full opacity-80"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}
-                  />
                 </div>
               </div>
             </div>
