@@ -692,7 +692,15 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       border: '2px solid rgba(0,0,0,0.1)'
                     }}
                   >
-                    <div className="text-2xl">{config.emoji}</div>
+                    {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
+                      <img
+                        src={config.emoji}
+                        alt="Custom icon"
+                        className="w-12 h-12 object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className="text-2xl">{config.emoji}</div>
+                    )}
                   </div>
 
                   <div
