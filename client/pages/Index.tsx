@@ -513,37 +513,8 @@ export default function Index() {
 
           {/* Preview */}
           <div className="lg:sticky lg:top-8">
-            <div className="space-y-4">
-              <div className="text-sm text-red-500 flex items-center space-x-1">
-                <span>Sponsored by</span>
-                <span className="text-red-600">❤️</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm">
-                <div className="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
-                  <span className="text-purple-600 text-xs">?</span>
-                </div>
-                <span className="font-medium">Inline Help</span>
-              </div>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                Answer customer questions before they ask.<br/>
-                Connect your Notion Knowledge base (new blogs so on advanced 
-                customer support tool that you to provide better customer 
-                support.) to your or automation, edit.
-              </p>
-              
-              <BlockPreview config={config} currentTime={currentTime} />
-              
-              <div className="text-xs text-gray-500 font-mono break-all">
-                https://getkairo.com/embed/type={config.type}
-              </div>
-              <div className="flex items-center space-x-2 text-xs text-gray-500">
-                <Copy className="w-3 h-3" />
-                <span>Copy this link</span>
-              </div>
-              <p className="text-xs text-gray-600">
-                In Notion add an 'embed block' and paste this URL.
-              </p>
-            </div>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Preview</h2>
+            <BlockPreview config={config} currentTime={currentTime} />
           </div>
         </div>
       </div>
