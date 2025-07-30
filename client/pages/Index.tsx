@@ -5,15 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Palette, 
-  Settings, 
-  Eye, 
-  Copy, 
-  Check, 
-  Cube, 
-  Timer, 
-  TrendingUp, 
+import {
+  Palette,
+  Settings,
+  Eye,
+  Copy,
+  Check,
+  Box,
+  Timer,
+  TrendingUp,
   Plus,
   Minus,
   Play,
