@@ -397,19 +397,7 @@ export default function Index() {
               </>
             )}
 
-            {/* Dark Mode */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Dark mode</label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={config.darkMode}
-                  onChange={(e) => setConfig(prev => ({ ...prev, darkMode: e.target.checked }))}
-                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                />
-                <span className="ml-2 text-sm text-gray-600">Enable dark mode</span>
-              </label>
-            </div>
+
 
             {/* Color Palette */}
             <div>
