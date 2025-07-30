@@ -381,52 +381,99 @@ interface WidgetPreviewProps {
 
 function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewProps) {
   const [localValue, setLocalValue] = useState(config.value);
+  const [currentTime, setCurrentTime] = useState('00:00:00');
   const [timeLeft, setTimeLeft] = useState('02:18:45');
 
   useEffect(() => {
     setLocalValue(config.value);
   }, [config.value]);
 
+  // Update current time for TimeBlock
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      setCurrentTime(`${hours}:${minutes}:${seconds}`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const selectedColor = colorOptions.find(c => c.value === config.color) || colorOptions[0];
   const progressPercentage = Math.min(100, Math.round((localValue / config.target) * 100));
 
   const renderWidgetContent = () => {
     switch (config.type) {
+      case 'timeblock':
+        return (
+          <div className="flex flex-col items-center justify-center h-full relative">
+            {/* Timer above icon */}
+            <div className="text-3xl font-mono font-bold text-white mb-4">
+              {currentTime}
+            </div>
+            {/* Icon in center */}
+            <div className="text-5xl mb-4">{config.icon}</div>
+            {/* Name below icon */}
+            <div className="text-lg font-semibold text-white/90">
+              {config.title}
+            </div>
+          </div>
+        );
+
       case 'counter':
         return (
-          <>
-            <div className="text-4xl mb-2">{config.icon}</div>
-            <div className="text-2xl font-bold text-white mb-1">{localValue} / {config.target}</div>
-            <div className="text-sm text-white/80 mb-3">{config.title}</div>
-            <div className="flex gap-2 w-full">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLocalValue(Math.max(0, localValue - config.increment));
-                }}
-                className="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-2 text-white transition-colors"
-              >
-                <Minus className="w-4 h-4 mx-auto" />
-              </button>
+          <div className="flex items-center justify-between h-full w-full px-6">
+            {/* Icon on left */}
+            <div className="text-4xl">{config.icon}</div>
+
+            {/* Value/target in center */}
+            <div className="text-2xl font-bold text-white">
+              {localValue} / {config.target}
+            </div>
+
+            {/* +/- buttons on right */}
+            <div className="flex flex-col gap-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setLocalValue(localValue + config.increment);
                 }}
-                className="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-2 text-white transition-colors"
+                className="bg-white/20 hover:bg-white/30 rounded-lg p-2 text-white transition-colors"
               >
-                <Plus className="w-4 h-4 mx-auto" />
+                <Plus className="w-4 h-4" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLocalValue(Math.max(0, localValue - config.increment));
+                }}
+                className="bg-white/20 hover:bg-white/30 rounded-lg p-2 text-white transition-colors"
+              >
+                <Minus className="w-4 h-4" />
               </button>
             </div>
-          </>
+          </div>
         );
-      
-      case 'timer':
+
+      case 'countdown':
         return (
-          <>
-            <div className="text-3xl mb-2">{config.icon}</div>
-            <div className="text-lg font-bold text-white mb-1">{timeLeft}</div>
-            <div className="text-sm text-white/80 mb-3">{config.title}</div>
+          <div className="flex items-center justify-between h-full w-full px-6">
+            {/* Icon on left */}
+            <div className="text-4xl">{config.icon}</div>
+
+            {/* Timer and title in center */}
+            <div className="flex flex-col items-center">
+              <div className="text-2xl font-mono font-bold text-white mb-1">
+                {timeLeft}
+              </div>
+              <div className="text-sm text-white/80">{config.title}</div>
+            </div>
+
+            {/* Start button on right */}
             <button
               onClick={(e) => e.stopPropagation()}
               className="bg-white/20 hover:bg-white/30 rounded-lg px-4 py-2 text-white transition-colors flex items-center gap-2"
@@ -434,32 +481,37 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
               <Play className="w-4 h-4" />
               Start
             </button>
-          </>
+          </div>
         );
-      
+
       case 'progress':
         return (
-          <>
-            <div className="text-4xl mb-2">{config.icon}</div>
-            <div className="text-2xl font-bold text-white mb-1">{progressPercentage}%</div>
-            <div className="text-sm text-white/80 mb-3">{config.title}</div>
-            <div className="w-full bg-white/20 rounded-full h-2">
+          <div className="flex flex-col items-center justify-center h-full relative">
+            {/* Icon at top */}
+            <div className="text-4xl mb-3">{config.icon}</div>
+            {/* Percentage */}
+            <div className="text-3xl font-bold text-white mb-2">{progressPercentage}%</div>
+            {/* Title */}
+            <div className="text-lg text-white/90 mb-4">{config.title}</div>
+            {/* Progress bar */}
+            <div className="w-4/5 bg-white/20 rounded-full h-3 mb-3">
               <div
-                className="bg-white rounded-full h-2 transition-all duration-500"
+                className="bg-white rounded-full h-3 transition-all duration-500"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
-            <div className="text-xs text-white/60 mt-2">{localValue} / {config.target}</div>
-          </>
+            {/* Progress text */}
+            <div className="text-sm text-white/70">{localValue} of {config.target}</div>
+          </div>
         );
-      
+
       default:
         return (
-          <>
+          <div className="flex flex-col items-center justify-center h-full">
             <div className="text-4xl mb-3">{config.icon}</div>
             <div className="text-xl font-bold text-white mb-1">{config.title}</div>
-            <div className="text-sm text-white/80">Basic Widget</div>
-          </>
+            <div className="text-sm text-white/80">Time Block</div>
+          </div>
         );
     }
   };
