@@ -245,7 +245,7 @@ export default function Index() {
                     onChange={(e) => setConfig(prev => ({ ...prev, hoursplatform: parseInt(e.target.value) }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
                   >
-                    {Array.from({length: 24}, (_, i) => (
+                    {Array.from({length: 11}, (_, i) => (
                       <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>
                     ))}
                   </select>
