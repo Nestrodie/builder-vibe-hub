@@ -642,9 +642,8 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
       case 'countdown':
         return (
           <div className="flex items-center justify-between p-4 h-24 relative overflow-hidden" style={{
-            backgroundColor: transparentBg,
-            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
-            color: textColor,
+            background: `linear-gradient(135deg, ${waveColor}40, ${waveColor}60)`,
+            color: 'black',
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
@@ -663,16 +662,12 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             </div>
             <button
               onClick={() => setIsRunning(!isRunning)}
-              className="z-10 relative rounded p-2 flex items-center transition-all"
-              style={{
-                backgroundColor: `${waveColor}30`,
-                border: `1px solid ${waveColor}60`
-              }}
+              className="z-10 relative rounded p-2 flex items-center transition-all bg-white bg-opacity-30 hover:bg-opacity-50"
             >
               {isRunning ? (
-                <div className="w-4 h-4 bg-current rounded-sm" style={{ color: textColor }} />
+                <div className="w-4 h-4 bg-black rounded-sm" />
               ) : (
-                <Play className="w-4 h-4" style={{ color: textColor }} />
+                <Play className="w-4 h-4 text-black" />
               )}
             </button>
           </div>
@@ -684,9 +679,8 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
         return (
           <div className="p-4 space-y-3 h-32 relative overflow-hidden" style={{
-            backgroundColor: transparentBg,
-            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
-            color: textColor,
+            background: `linear-gradient(135deg, ${waveColor}40, ${waveColor}60)`,
+            color: 'black',
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
@@ -710,10 +704,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             {/* Progress bar */}
             <div className="w-full bg-black bg-opacity-20 rounded-full h-2 z-10 relative">
               <div
-                className="h-2 rounded-full transition-all duration-500"
+                className="h-2 rounded-full transition-all duration-500 bg-black"
                 style={{
-                  width: `${progressPercent}%`,
-                  backgroundColor: waveColor
+                  width: `${progressPercent}%`
                 }}
               />
             </div>
