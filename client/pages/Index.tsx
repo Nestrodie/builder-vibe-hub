@@ -73,13 +73,28 @@ const widgetTypes = [
 export default function Index() {
   const [config, setConfig] = useState<WidgetConfig>({
     type: 'timeblock',
-    title: 'Daily Goal',
+    title: 'My Time Block',
     color: '#8B5CF6',
-    icon: '🚀',
-    size: 'medium',
+    icon: '⏰',
+    darkMode: false,
+
+    // TimeBlock defaults
+    hours: 0,
+    minutes: 0,
+
+    // Habit Block defaults
     value: 0,
     target: 10,
     increment: 1,
+
+    // Countdown defaults
+    countdownMinutes: 25,
+    countdownSeconds: 0,
+
+    // Progress defaults
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    currentProgress: 0,
   });
 
   const [selectedWidget, setSelectedWidget] = useState<WidgetType>('timeblock');
