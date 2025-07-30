@@ -105,11 +105,11 @@ export default function Index() {
 
   const getWidgetSize = (type: WidgetType) => {
     switch (type) {
-      case 'basic':
+      case 'timeblock':
         return 'aspect-[5/4]'; // 5x4
       case 'counter':
         return 'aspect-[5/3]'; // 5x3
-      case 'timer':
+      case 'countdown':
         return 'aspect-[5/2]'; // 5x2
       case 'progress':
         return 'aspect-[5/4]'; // 5x4
