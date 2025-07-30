@@ -574,32 +574,60 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
   const progressPercentage = Math.min(100, Math.round((localValue / config.target) * 100));
 
   const renderWidgetContent = () => {
+    const textColor = config.darkMode ? 'text-white' : 'text-black';
+    const buttonBg = config.darkMode ? 'bg-white/20 hover:bg-white/30' : 'bg-black/20 hover:bg-black/30';
+
     switch (config.type) {
       case 'timeblock':
+        const displayTime = config.hours !== undefined && config.minutes !== undefined
+          ? `${config.hours.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
+          : currentTime;
+
         return (
           <div className="flex flex-col items-center justify-center h-full relative">
             {/* Timer above icon */}
-            <div className="text-3xl font-mono font-bold text-white mb-4">
-              {currentTime}
+            <div className={cn("text-3xl font-mono font-bold mb-4", textColor)}>
+              {displayTime}
             </div>
             {/* Icon in center */}
-            <div className="text-5xl mb-4">{config.icon}</div>
+            <div className="text-5xl mb-4">
+              {config.icon.startsWith('http') ? (
+                <img src={config.icon} alt="icon" className="w-12 h-12 object-cover rounded" />
+              ) : (
+                config.icon
+              )}
+            </div>
             {/* Name below icon */}
-            <div className="text-lg font-semibold text-white/90">
+            <div className={cn("text-lg font-semibold", textColor)}>
               {config.title}
             </div>
           </div>
         );
 
-      case 'counter':
+      case 'habit':
+        const isGoalReached = localValue >= (config.target || 10);
+
         return (
-          <div className="flex items-center justify-between h-full w-full px-6">
+          <div className="flex items-center justify-between h-full w-full px-6 relative">
+            {/* Fireworks effect when goal reached */}
+            {isGoalReached && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="text-6xl animate-bounce">🎉</div>
+              </div>
+            )}
+
             {/* Icon on left */}
-            <div className="text-4xl">{config.icon}</div>
+            <div className="text-4xl">
+              {config.icon.startsWith('http') ? (
+                <img src={config.icon} alt="icon" className="w-10 h-10 object-cover rounded" />
+              ) : (
+                config.icon
+              )}
+            </div>
 
             {/* Value/target in center */}
-            <div className="text-2xl font-bold text-white">
-              {localValue} / {config.target}
+            <div className={cn("text-2xl font-bold", textColor)}>
+              {localValue} / {config.target || 10}
             </div>
 
             {/* +/- buttons on right */}
@@ -607,18 +635,18 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setLocalValue(localValue + config.increment);
+                  setLocalValue(localValue + (config.increment || 1));
                 }}
-                className="bg-white/20 hover:bg-white/30 rounded-lg p-2 text-white transition-colors"
+                className={cn("rounded-lg p-2 transition-colors", buttonBg, textColor)}
               >
                 <Plus className="w-4 h-4" />
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setLocalValue(Math.max(0, localValue - config.increment));
+                  setLocalValue(Math.max(0, localValue - (config.increment || 1)));
                 }}
-                className="bg-white/20 hover:bg-white/30 rounded-lg p-2 text-white transition-colors"
+                className={cn("rounded-lg p-2 transition-colors", buttonBg, textColor)}
               >
                 <Minus className="w-4 h-4" />
               </button>
@@ -627,23 +655,33 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
         );
 
       case 'countdown':
+        const totalSeconds = (config.countdownMinutes || 25) * 60 + (config.countdownSeconds || 0);
+        const displayMinutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const displaySecs = (totalSeconds % 60).toString().padStart(2, '0');
+
         return (
           <div className="flex items-center justify-between h-full w-full px-6">
             {/* Icon on left */}
-            <div className="text-4xl">{config.icon}</div>
+            <div className="text-4xl">
+              {config.icon.startsWith('http') ? (
+                <img src={config.icon} alt="icon" className="w-10 h-10 object-cover rounded" />
+              ) : (
+                config.icon
+              )}
+            </div>
 
             {/* Timer and title in center */}
             <div className="flex flex-col items-center">
-              <div className="text-2xl font-mono font-bold text-white mb-1">
-                {timeLeft}
+              <div className={cn("text-2xl font-mono font-bold mb-1", textColor)}>
+                {displayMinutes}:{displaySecs}
               </div>
-              <div className="text-sm text-white/80">{config.title}</div>
+              <div className={cn("text-sm", textColor, "opacity-80")}>{config.title}</div>
             </div>
 
             {/* Start button on right */}
             <button
               onClick={(e) => e.stopPropagation()}
-              className="bg-white/20 hover:bg-white/30 rounded-lg px-4 py-2 text-white transition-colors flex items-center gap-2"
+              className={cn("rounded-lg px-4 py-2 transition-colors flex items-center gap-2", buttonBg, textColor)}
             >
               <Play className="w-4 h-4" />
               Start
@@ -652,23 +690,38 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
         );
 
       case 'progress':
+        const progressPercent = config.currentProgress || 0;
+        const startDate = new Date(config.startDate || Date.now());
+        const endDate = new Date(config.endDate || Date.now() + 30 * 24 * 60 * 60 * 1000);
+        const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        const daysElapsed = Math.ceil((Date.now() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        const daysRemaining = Math.max(0, totalDays - daysElapsed);
+
         return (
-          <div className="flex flex-col items-center justify-center h-full relative">
+          <div className="flex flex-col items-center justify-center h-full relative p-4">
             {/* Icon at top */}
-            <div className="text-4xl mb-3">{config.icon}</div>
+            <div className="text-4xl mb-3">
+              {config.icon.startsWith('http') ? (
+                <img src={config.icon} alt="icon" className="w-10 h-10 object-cover rounded" />
+              ) : (
+                config.icon
+              )}
+            </div>
             {/* Percentage */}
-            <div className="text-3xl font-bold text-white mb-2">{progressPercentage}%</div>
+            <div className={cn("text-3xl font-bold mb-2", textColor)}>{progressPercent}%</div>
             {/* Title */}
-            <div className="text-lg text-white/90 mb-4">{config.title}</div>
+            <div className={cn("text-lg mb-3 text-center", textColor)}>{config.title}</div>
             {/* Progress bar */}
-            <div className="w-4/5 bg-white/20 rounded-full h-3 mb-3">
+            <div className={cn("w-4/5 rounded-full h-3 mb-3", config.darkMode ? "bg-white/20" : "bg-black/20")}>
               <div
-                className="bg-white rounded-full h-3 transition-all duration-500"
-                style={{ width: `${progressPercentage}%` }}
+                className={cn("rounded-full h-3 transition-all duration-500", config.darkMode ? "bg-white" : "bg-black")}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
-            {/* Progress text */}
-            <div className="text-sm text-white/70">{localValue} of {config.target}</div>
+            {/* Days remaining */}
+            <div className={cn("text-sm text-center", textColor, "opacity-70")}>
+              {daysRemaining} days remaining
+            </div>
           </div>
         );
 
@@ -676,8 +729,8 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
         return (
           <div className="flex flex-col items-center justify-center h-full">
             <div className="text-4xl mb-3">{config.icon}</div>
-            <div className="text-xl font-bold text-white mb-1">{config.title}</div>
-            <div className="text-sm text-white/80">Time Block</div>
+            <div className={cn("text-xl font-bold mb-1", textColor)}>{config.title}</div>
+            <div className={cn("text-sm", textColor, "opacity-80")}>Time Block</div>
           </div>
         );
     }
