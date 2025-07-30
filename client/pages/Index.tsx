@@ -709,7 +709,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'habit':
         return (
-          <div className="flex items-center justify-between p-4" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="flex items-center justify-between p-4 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
             <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
               <div className="text-xl font-bold">
@@ -725,7 +725,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'countdown':
         return (
-          <div className="flex items-center justify-between p-4" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="flex items-center justify-between p-4 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
             <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
               <div className="text-xl font-mono font-bold">
@@ -744,7 +744,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
           Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
 
         return (
-          <div className="p-4 space-y-3" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="p-4 space-y-3 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
             <div className="flex items-center justify-between">
               <div className="text-lg">{config.emoji}</div>
               <div className="text-sm">{config.title}</div>
