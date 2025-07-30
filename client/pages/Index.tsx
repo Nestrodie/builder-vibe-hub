@@ -582,62 +582,61 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
         const displayTime = config.hoursplatform !== undefined && config.minutes !== undefined
           ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
           : currentTime;
-        const bottomTime = config.hoursplatform !== undefined && config.minutes !== undefined
-          ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
-          : '02:00:00';
+
+        // Convert hex to RGB for transparency
+        const hexToRgb = (hex: string) => {
+          const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+          return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+          } : { r: 16, g: 185, b: 129 };
+        };
+
+        const rgb = hexToRgb(config.color);
+        const transparentBg = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+        const waveColor = config.color;
 
         return (
-          <div className="relative w-full h-48 overflow-hidden rounded-xl" style={{ backgroundColor: bgColor }}>
-            {/* Gradient background layers */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(135deg, ${bgColor}dd 0%, ${bgColor}bb 50%, ${bgColor}ee 100%)`
-              }}
-            />
-
-            {/* Animated wave layers */}
+          <div className="relative w-full h-48 overflow-hidden rounded-xl" style={{ backgroundColor: transparentBg }}>
+            {/* Static wave layers (no animation) */}
             <div className="absolute inset-0">
               {/* First wave layer */}
               <div
-                className="absolute bottom-0 w-full h-32 opacity-60"
+                className="absolute bottom-0 w-full h-32"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${bgColor}aa 50%, ${bgColor} 100%)`,
-                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)',
-                  animation: 'wave1 4s ease-in-out infinite'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}aa 50%, ${waveColor} 100%)`,
+                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)'
                 }}
               />
 
               {/* Second wave layer */}
               <div
-                className="absolute bottom-0 w-full h-28 opacity-40"
+                className="absolute bottom-0 w-full h-28 opacity-60"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${bgColor}77 50%, ${bgColor}dd 100%)`,
-                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)',
-                  animation: 'wave2 6s ease-in-out infinite reverse'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}77 50%, ${waveColor}dd 100%)`,
+                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)'
                 }}
               />
 
               {/* Third wave layer */}
               <div
-                className="absolute bottom-0 w-full h-24 opacity-30"
+                className="absolute bottom-0 w-full h-24 opacity-40"
                 style={{
-                  background: `linear-gradient(180deg, transparent 20%, ${bgColor}44 60%, ${bgColor}bb 100%)`,
-                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)',
-                  animation: 'wave3 8s ease-in-out infinite'
+                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}44 60%, ${waveColor}bb 100%)`,
+                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)'
                 }}
               />
             </div>
 
-            {/* Floating bubbles/dots */}
+            {/* Static floating bubbles/dots */}
             <div className="absolute inset-0">
               <div
                 className="absolute w-2 h-2 rounded-full opacity-60"
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.4)',
                   top: '20%',
-                  left: '15%',
-                  animation: 'float1 3s ease-in-out infinite'
+                  left: '15%'
                 }}
               />
               <div
@@ -645,8 +644,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.3)',
                   top: '60%',
-                  right: '20%',
-                  animation: 'float2 4s ease-in-out infinite'
+                  right: '20%'
                 }}
               />
               <div
@@ -654,8 +652,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.5)',
                   top: '40%',
-                  right: '10%',
-                  animation: 'float3 2.5s ease-in-out infinite'
+                  right: '10%'
                 }}
               />
               <div
@@ -663,26 +660,25 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.3)',
                   bottom: '30%',
-                  left: '25%',
-                  animation: 'float1 3.5s ease-in-out infinite'
+                  left: '25%'
                 }}
               />
             </div>
 
             {/* Content layer */}
-            <div className="relative z-10 h-full flex flex-col items-center justify-between p-4 text-white">
+            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4 text-white">
               {/* Top time display */}
-              <div className="text-lg font-mono font-bold mt-2">
+              <div className="text-lg font-mono font-bold mb-4">
                 {displayTime}
               </div>
 
               {/* Block title */}
-              <div className="text-sm font-medium">
+              <div className="text-sm font-medium mb-4">
                 {config.title}
               </div>
 
               {/* Character in center */}
-              <div className="flex-1 flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <div className="relative">
                   {/* Character body */}
                   <div
@@ -692,7 +688,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       border: '2px solid rgba(0,0,0,0.1)'
                     }}
                   >
-                    {/* Character face - using selected emoji/font */}
+                    {/* Character face - using selected emoji/icon */}
                     <div className="text-2xl">{config.emoji}</div>
                   </div>
 
@@ -707,43 +703,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                   />
                 </div>
               </div>
-
-              {/* Bottom time display */}
-              <div
-                className="text-sm font-mono font-semibold px-3 py-1 rounded"
-                style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-              >
-                {bottomTime}
-              </div>
             </div>
-
-            {/* Add styles for animations */}
-            <style jsx>{`
-              @keyframes wave1 {
-                0%, 100% { transform: translateX(0) scaleY(1); }
-                50% { transform: translateX(-10px) scaleY(1.1); }
-              }
-              @keyframes wave2 {
-                0%, 100% { transform: translateX(0) scaleY(1); }
-                50% { transform: translateX(15px) scaleY(0.9); }
-              }
-              @keyframes wave3 {
-                0%, 100% { transform: translateX(0) scaleY(1); }
-                50% { transform: translateX(-5px) scaleY(1.05); }
-              }
-              @keyframes float1 {
-                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
-                50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; }
-              }
-              @keyframes float2 {
-                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; }
-                50% { transform: translateY(-8px) scale(1.2); opacity: 0.7; }
-              }
-              @keyframes float3 {
-                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
-                50% { transform: translateY(-6px) scale(1.15); opacity: 0.9; }
-              }
-            `}</style>
           </div>
         );
 
