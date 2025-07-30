@@ -19,6 +19,8 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+  app.get("/api/widgets", getWidgets);
+  app.get("/api/widgets/:id", getWidget);
 
   return app;
 }
