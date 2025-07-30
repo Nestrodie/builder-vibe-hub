@@ -1,75 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Play, Plus, Minus, Clock } from 'lucide-react';
+import { Copy, Check, Play, Plus, Minus, Clock, Trash2 } from 'lucide-react';
 
-type WidgetType = 'time' | 'habit' | 'countdown' | 'goal';
+type WidgetType = 'time' | 'habit' | 'countdown' | 'progress';
+
+interface Counter {
+  id: string;
+  title: string;
+  type: string;
+  value: number;
+}
 
 interface BlockConfig {
   type: WidgetType;
   title: string;
   emoji: string;
   color: string;
+  darkMode: boolean;
   
   // Time specific
-  showCurrentTime?: boolean;
+  hoursplatform?: number;
+  minutes?: number;
+  font?: string;
   
   // Habit specific  
-  current?: number;
-  target?: number;
+  increaseBy?: number;
+  goal?: number;
   
   // Countdown specific
-  minutes?: number;
+  countdownMinutes?: number;
   seconds?: number;
   
-  // Goal specific
-  progress?: number;
-  description?: string;
+  // Progress specific
+  startDate?: string;
+  endDate?: string;
+  counters?: Counter[];
 }
 
 const blockTypes = [
   {
     id: 'time',
-    name: 'Time tracker',
-    description: 'Track time spent on activities',
-    color: '#6366f1',
-    emoji: '⏰'
+    name: 'Time Block',
+    description: 'Track time with custom settings',
+    color: '#10b981',
+    emoji: '🐸'
   },
   {
     id: 'habit',
-    name: 'Habit tracker', 
+    name: 'Habit/Goal Block', 
     description: 'Build better habits day by day',
     color: '#10b981',
-    emoji: '✅'
+    emoji: '🐼'
   },
   {
     id: 'countdown',
-    name: 'Countdown timer',
+    name: 'Countdown Block',
     description: 'Focus with pomodoro technique',
-    color: '#f59e0b',
-    emoji: '⏱️'
+    color: '#10b981',
+    emoji: '🐼'
   },
   {
-    id: 'goal',
-    name: 'Goal tracker',
+    id: 'progress',
+    name: 'Progress Block',
     description: 'Track progress towards your goals',
-    color: '#8b5cf6',
-    emoji: '🎯'
+    color: '#10b981',
+    emoji: '📊'
   }
+];
+
+const colorOptions = [
+  '#9ca3af', '#6b7280', '#4b5563', '#374151', '#f87171', '#fb923c', '#fbbf24',
+  '#facc15', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', 
+  '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899'
+];
+
+const animalFonts = [
+  '🐸', '🐼', '🐻', '🐱', '🐶', '🦊', '🐰', '🐨', '🐵'
+];
+
+const emojiIcons = [
+  '🐼', '😊', '😎', '🍰', '😋', '🤩', '🥰',
+  '😴', '🤢', '⭐', '📚', '⏰', '📱', '💎',
+  '🅰️', '🍔', '💻', '🥛', '🍷', '🍹'
 ];
 
 export default function Index() {
   const [selectedBlock, setSelectedBlock] = useState<WidgetType>('time');
   const [config, setConfig] = useState<BlockConfig>({
     type: 'time',
-    title: 'Daily Focus',
-    emoji: '⏰',
-    color: '#6366f1',
-    showCurrentTime: true,
-    current: 5,
-    target: 10,
-    minutes: 25,
+    title: 'Block title',
+    emoji: '🐸',
+    color: '#10b981',
+    darkMode: false,
+    hoursplatform: 0,
+    minutes: 0,
+    font: '🐸',
+    increaseBy: 1,
+    goal: 2,
+    countdownMinutes: 2,
     seconds: 0,
-    progress: 65,
-    description: 'Project completion'
+    startDate: '2024-07-30',
+    endDate: '2024-08-13',
+    counters: []
   });
   
   const [currentTime, setCurrentTime] = useState('');
@@ -97,7 +128,6 @@ export default function Index() {
       setConfig(prev => ({
         ...prev,
         type: selectedBlock,
-        color: selectedType.color,
         emoji: selectedType.emoji
       }));
     }
@@ -107,7 +137,11 @@ export default function Index() {
     const params = new URLSearchParams();
     Object.entries(config).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        params.append(key, value.toString());
+        if (key === 'counters') {
+          params.append(key, JSON.stringify(value));
+        } else {
+          params.append(key, value.toString());
+        }
       }
     });
     const url = `${window.location.origin}/widget?${params.toString()}`;
@@ -120,6 +154,35 @@ export default function Index() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const addCounter = () => {
+    const newCounter: Counter = {
+      id: Date.now().toString(),
+      title: '',
+      type: 'Count',
+      value: 0
+    };
+    setConfig(prev => ({
+      ...prev,
+      counters: [...(prev.counters || []), newCounter]
+    }));
+  };
+
+  const updateCounter = (id: string, field: keyof Counter, value: string | number) => {
+    setConfig(prev => ({
+      ...prev,
+      counters: prev.counters?.map(counter => 
+        counter.id === id ? { ...counter, [field]: value } : counter
+      )
+    }));
+  };
+
+  const removeCounter = (id: string) => {
+    setConfig(prev => ({
+      ...prev,
+      counters: prev.counters?.filter(counter => counter.id !== id)
+    }));
   };
 
   return (
@@ -172,157 +235,314 @@ export default function Index() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Block Types */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Choose your block type</h2>
-            <div className="grid grid-cols-1 gap-4">
-              {blockTypes.map((block) => (
-                <button
-                  key={block.id}
-                  onClick={() => setSelectedBlock(block.id as WidgetType)}
-                  className={`p-6 rounded-xl border-2 text-left transition-all hover:shadow-md ${
-                    selectedBlock === block.id
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-start space-x-4">
-                    <div 
-                      className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl"
-                      style={{ backgroundColor: `${block.color}20` }}
-                    >
-                      {block.emoji}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{block.name}</h3>
-                      <p className="text-gray-600 text-sm">{block.description}</p>
-                    </div>
-                  </div>
-                </button>
-              ))}
+          {/* Configuration Panel */}
+          <div className="max-w-md space-y-6">
+            {/* Block Type Selector */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <select
+                value={selectedBlock}
+                onChange={(e) => setSelectedBlock(e.target.value as WidgetType)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+              >
+                {blockTypes.map((type) => (
+                  <option key={type.id} value={type.id}>{type.name}</option>
+                ))}
+              </select>
             </div>
 
-            {/* Configuration */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-              <h3 className="font-semibold text-gray-900">Customize your block</h3>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Block title</label>
-                <input
-                  type="text"
-                  value={config.title}
-                  onChange={(e) => setConfig(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Enter block title"
-                />
-              </div>
+            {/* Title */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <input
+                type="text"
+                value={config.title}
+                onChange={(e) => setConfig(prev => ({ ...prev, title: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                placeholder="Block title"
+              />
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Emoji</label>
-                <input
-                  type="text"
-                  value={config.emoji}
-                  onChange={(e) => setConfig(prev => ({ ...prev, emoji: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Enter emoji"
-                />
-              </div>
-
-              {config.type === 'habit' && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Current</label>
-                    <input
-                      type="number"
-                      value={config.current || 0}
-                      onChange={(e) => setConfig(prev => ({ ...prev, current: parseInt(e.target.value) || 0 }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Target</label>
-                    <input
-                      type="number"
-                      value={config.target || 10}
-                      onChange={(e) => setConfig(prev => ({ ...prev, target: parseInt(e.target.value) || 10 }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {config.type === 'countdown' && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Minutes</label>
-                    <input
-                      type="number"
-                      value={config.minutes || 25}
-                      onChange={(e) => setConfig(prev => ({ ...prev, minutes: parseInt(e.target.value) || 25 }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Seconds</label>
-                    <input
-                      type="number"
-                      value={config.seconds || 0}
-                      onChange={(e) => setConfig(prev => ({ ...prev, seconds: parseInt(e.target.value) || 0 }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {config.type === 'goal' && (
+            {/* Type-specific settings */}
+            {config.type === 'time' && (
+              <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Progress (%)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Hours platform</label>
+                  <select
+                    value={config.hoursplatform || 0}
+                    onChange={(e) => setConfig(prev => ({ ...prev, hoursplatform: parseInt(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+                  >
+                    {Array.from({length: 24}, (_, i) => (
+                      <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Minutes</label>
+                  <select
+                    value={config.minutes || 0}
+                    onChange={(e) => setConfig(prev => ({ ...prev, minutes: parseInt(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+                  >
+                    {Array.from({length: 60}, (_, i) => (
+                      <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
+
+            {config.type === 'habit' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Increase by</label>
                   <input
                     type="number"
-                    min="0"
-                    max="100"
-                    value={config.progress || 0}
-                    onChange={(e) => setConfig(prev => ({ ...prev, progress: parseInt(e.target.value) || 0 }))}
+                    value={config.increaseBy || 1}
+                    onChange={(e) => setConfig(prev => ({ ...prev, increaseBy: parseInt(e.target.value) || 1 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   />
                 </div>
-              )}
-
-              <button
-                onClick={generateUrl}
-                className="w-full bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition-colors"
-              >
-                Generate embed link
-              </button>
-
-              {generatedUrl && (
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Embed link</label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={generatedUrl}
-                      readOnly
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm"
-                    />
-                    <button
-                      onClick={copyUrl}
-                      className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                      {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-600" />}
-                    </button>
-                  </div>
-                  {copied && <p className="text-sm text-green-600">✓ Copied to clipboard</p>}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Goal</label>
+                  <input
+                    type="number"
+                    value={config.goal || 2}
+                    onChange={(e) => setConfig(prev => ({ ...prev, goal: parseInt(e.target.value) || 2 }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
                 </div>
-              )}
+              </>
+            )}
+
+            {config.type === 'countdown' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Minutes</label>
+                  <input
+                    type="number"
+                    value={config.countdownMinutes || 2}
+                    onChange={(e) => setConfig(prev => ({ ...prev, countdownMinutes: parseInt(e.target.value) || 2 }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Seconds</label>
+                  <select
+                    value={config.seconds || 0}
+                    onChange={(e) => setConfig(prev => ({ ...prev, seconds: parseInt(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+                  >
+                    {Array.from({length: 60}, (_, i) => (
+                      <option key={i} value={i}>{i.toString().padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
+
+            {config.type === 'progress' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Start</label>
+                  <input
+                    type="datetime-local"
+                    value={config.startDate ? `${config.startDate}T10:41` : '2024-07-30T10:41'}
+                    onChange={(e) => setConfig(prev => ({ ...prev, startDate: e.target.value.split('T')[0] }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">End</label>
+                  <input
+                    type="datetime-local"
+                    value={config.endDate ? `${config.endDate}T10:41` : '2024-08-13T10:41'}
+                    onChange={(e) => setConfig(prev => ({ ...prev, endDate: e.target.value.split('T')[0] }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
+                </div>
+
+                {/* Counters Table */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Counters</label>
+                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="bg-gray-50 px-3 py-2 border-b border-gray-300">
+                      <div className="grid grid-cols-5 gap-2 text-xs font-medium text-gray-700">
+                        <span>TITLE</span>
+                        <span>TYPE</span>
+                        <span>VALUE</span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
+                    <div className="divide-y divide-gray-200">
+                      {config.counters?.map((counter) => (
+                        <div key={counter.id} className="px-3 py-2">
+                          <div className="grid grid-cols-5 gap-2 items-center">
+                            <input
+                              type="text"
+                              value={counter.title}
+                              onChange={(e) => updateCounter(counter.id, 'title', e.target.value)}
+                              className="text-xs border border-gray-200 rounded px-2 py-1"
+                              placeholder="Title"
+                            />
+                            <select
+                              value={counter.type}
+                              onChange={(e) => updateCounter(counter.id, 'type', e.target.value)}
+                              className="text-xs border border-gray-200 rounded px-2 py-1"
+                            >
+                              <option value="Count">Count</option>
+                              <option value="Time">Time</option>
+                              <option value="Progress">Progress</option>
+                            </select>
+                            <input
+                              type="number"
+                              value={counter.value}
+                              onChange={(e) => updateCounter(counter.id, 'value', parseInt(e.target.value) || 0)}
+                              className="text-xs border border-gray-200 rounded px-2 py-1"
+                            />
+                            <button
+                              onClick={() => removeCounter(counter.id)}
+                              className="text-red-500 hover:text-red-700 p-1"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="px-3 py-2 border-t border-gray-300">
+                      <button
+                        onClick={addCounter}
+                        className="text-sm text-teal-600 hover:text-teal-800"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Dark Mode */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Dark mode</label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={config.darkMode}
+                  onChange={(e) => setConfig(prev => ({ ...prev, darkMode: e.target.checked }))}
+                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                />
+                <span className="ml-2 text-sm text-gray-600">Enable dark mode</span>
+              </label>
             </div>
+
+            {/* Color Palette */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
+              <div className="grid grid-cols-7 gap-2">
+                {colorOptions.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setConfig(prev => ({ ...prev, color }))}
+                    className={`w-8 h-8 rounded-lg border-2 transition-all ${
+                      config.color === color ? 'border-gray-400 scale-110' : 'border-gray-200'
+                    }`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Icon/Font Selector */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {config.type === 'time' ? 'Font' : 'Icon'}
+              </label>
+              <div className="grid grid-cols-7 gap-2">
+                {(config.type === 'time' ? animalFonts : emojiIcons).map((icon) => (
+                  <button
+                    key={icon}
+                    onClick={() => setConfig(prev => ({ 
+                      ...prev, 
+                      emoji: icon,
+                      ...(config.type === 'time' ? { font: icon } : {})
+                    }))}
+                    className={`w-8 h-8 rounded-lg border-2 transition-all text-lg flex items-center justify-center ${
+                      config.emoji === icon ? 'border-gray-400 bg-gray-100' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    {icon}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Generate Button */}
+            <button
+              onClick={generateUrl}
+              className="w-full bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition-colors"
+            >
+              Generate embed link
+            </button>
+
+            {/* Generated URL */}
+            {generatedUrl && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">Embed link</label>
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={generatedUrl}
+                    readOnly
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm"
+                  />
+                  <button
+                    onClick={copyUrl}
+                    className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-600" />}
+                  </button>
+                </div>
+                {copied && <p className="text-sm text-green-600">✓ Copied to clipboard</p>}
+              </div>
+            )}
           </div>
 
           {/* Preview */}
           <div className="lg:sticky lg:top-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Preview</h2>
-            <div className="bg-white border-2 border-gray-200 rounded-xl p-8">
+            <div className="space-y-4">
+              <div className="text-sm text-red-500 flex items-center space-x-1">
+                <span>Sponsored by</span>
+                <span className="text-red-600">❤️</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <div className="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                  <span className="text-purple-600 text-xs">?</span>
+                </div>
+                <span className="font-medium">Inline Help</span>
+              </div>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                Answer customer questions before they ask.<br/>
+                Connect your Notion Knowledge base (new blogs so on advanced 
+                customer support tool that you to provide better customer 
+                support.) to your or automation, edit.
+              </p>
+              
               <BlockPreview config={config} currentTime={currentTime} />
+              
+              <div className="text-xs text-gray-500 font-mono break-all">
+                https://getkairo.com/embed/type={config.type}
+              </div>
+              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                <Copy className="w-3 h-3" />
+                <span>Copy this link</span>
+              </div>
+              <p className="text-xs text-gray-600">
+                In Notion add an 'embed block' and paste this URL.
+              </p>
             </div>
           </div>
         </div>
@@ -339,33 +559,13 @@ interface BlockPreviewProps {
 }
 
 function BlockPreview({ config, currentTime }: BlockPreviewProps) {
-  const [localCurrent, setLocalCurrent] = useState(config.current || 0);
+  const [localCurrent, setLocalCurrent] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState((config.minutes || 25) * 60 + (config.seconds || 0));
+  const [timeLeft, setTimeLeft] = useState((config.countdownMinutes || 2) * 60);
 
   useEffect(() => {
-    setLocalCurrent(config.current || 0);
-  }, [config.current]);
-
-  useEffect(() => {
-    setTimeLeft((config.minutes || 25) * 60 + (config.seconds || 0));
-  }, [config.minutes, config.seconds]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft(time => {
-          if (time <= 1) {
-            setIsRunning(false);
-            return 0;
-          }
-          return time - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft]);
+    setTimeLeft((config.countdownMinutes || 2) * 60);
+  }, [config.countdownMinutes]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -374,85 +574,67 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   };
 
   const renderBlock = () => {
+    const bgColor = config.darkMode ? '#1f2937' : config.color;
+    const textColor = config.darkMode ? 'white' : 'white';
+
     switch (config.type) {
       case 'time':
+        const displayTime = config.hoursplatform !== undefined && config.minutes !== undefined 
+          ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
+          : currentTime;
+          
         return (
-          <div className="text-center space-y-4">
-            <div className="text-4xl">{config.emoji}</div>
-            <div className="text-3xl font-mono font-bold text-gray-900">
-              {currentTime}
-            </div>
-            <div className="text-lg font-medium text-gray-700">
-              {config.title}
-            </div>
+          <div className="text-center space-y-4 p-6" style={{ backgroundColor: bgColor, color: textColor }}>
+            <div className="text-2xl">{displayTime}</div>
+            <div className="text-lg">{config.title}</div>
           </div>
         );
 
       case 'habit':
         return (
-          <div className="flex items-center justify-between">
-            <div className="text-3xl">{config.emoji}</div>
+          <div className="flex items-center justify-between p-4" style={{ backgroundColor: bgColor, color: textColor }}>
+            <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
-              <div className="text-2xl font-bold text-gray-900 mb-1">
-                {localCurrent} / {config.target || 10}
+              <div className="text-xl font-bold">
+                {localCurrent}/{config.goal || 2}
               </div>
-              <div className="text-sm text-gray-600">{config.title}</div>
+              <div className="text-sm">{config.title}</div>
             </div>
-            <div className="flex flex-col space-y-2">
-              <button
-                onClick={() => setLocalCurrent(localCurrent + 1)}
-                className="w-8 h-8 bg-teal-500 text-white rounded-md flex items-center justify-center hover:bg-teal-600"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setLocalCurrent(Math.max(0, localCurrent - 1))}
-                className="w-8 h-8 bg-gray-300 text-gray-700 rounded-md flex items-center justify-center hover:bg-gray-400"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
+            <div className="bg-white bg-opacity-20 rounded p-1">
+              <Plus className="w-4 h-4" />
             </div>
           </div>
         );
 
       case 'countdown':
         return (
-          <div className="flex items-center justify-between">
-            <div className="text-3xl">{config.emoji}</div>
+          <div className="flex items-center justify-between p-4" style={{ backgroundColor: bgColor, color: textColor }}>
+            <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
-              <div className="text-2xl font-mono font-bold text-gray-900 mb-1">
+              <div className="text-xl font-mono font-bold">
                 {formatTime(timeLeft)}
               </div>
-              <div className="text-sm text-gray-600">{config.title}</div>
+              <div className="text-sm">{config.title}</div>
             </div>
-            <button
-              onClick={() => setIsRunning(!isRunning)}
-              className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 flex items-center space-x-2"
-            >
+            <div className="bg-white bg-opacity-20 rounded p-2 flex items-center">
               <Play className="w-4 h-4" />
-              <span>{isRunning ? 'Pause' : 'Start'}</span>
-            </button>
+            </div>
           </div>
         );
 
-      case 'goal':
+      case 'progress':
+        const progressPercent = config.counters?.length ? 
+          Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
+        
         return (
-          <div className="text-center space-y-4">
-            <div className="text-4xl">{config.emoji}</div>
-            <div className="text-3xl font-bold text-gray-900">
-              {config.progress || 0}%
+          <div className="p-4 space-y-3" style={{ backgroundColor: bgColor, color: textColor }}>
+            <div className="flex items-center justify-between">
+              <div className="text-lg">{config.emoji}</div>
+              <div className="text-sm">{config.title}</div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="h-2 rounded-full transition-all duration-500"
-                style={{ 
-                  width: `${config.progress || 0}%`,
-                  backgroundColor: config.color 
-                }}
-              />
-            </div>
-            <div className="text-lg font-medium text-gray-700">
-              {config.title}
+            <div className="text-2xl font-bold">{progressPercent}%</div>
+            <div className="text-xs opacity-75">
+              13d, 23h, 59m
             </div>
           </div>
         );
@@ -463,10 +645,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   };
 
   return (
-    <div 
-      className="p-6 rounded-lg"
-      style={{ backgroundColor: `${config.color}10` }}
-    >
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm max-w-xs">
       {renderBlock()}
     </div>
   );
