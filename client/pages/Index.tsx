@@ -544,9 +544,21 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Convert hex to RGB for transparency
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 16, g: 185, b: 129 };
+  };
+
   const renderBlock = () => {
-    const bgColor = config.darkMode ? '#1f2937' : config.color;
-    const textColor = config.darkMode ? 'white' : 'white';
+    const rgb = hexToRgb(config.color);
+    const transparentBg = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`; // Very transparent
+    const waveColor = config.color;
+    const textColor = config.darkMode ? 'white' : 'black';
 
     switch (config.type) {
       case 'time':
@@ -554,104 +566,93 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
           ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
           : currentTime;
 
-        // Convert hex to RGB for transparency
-        const hexToRgb = (hex: string) => {
-          const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-          return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-          } : { r: 16, g: 185, b: 129 };
-        };
-
-        const rgb = hexToRgb(config.color);
-        const transparentBg = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
-        const waveColor = config.color;
-
         return (
-          <div className="relative w-full h-48 overflow-hidden rounded-xl border-2 border-black" style={{ backgroundColor: transparentBg }}>
-            {/* Static wave layers (no animation) */}
+          <div className="relative w-full h-48 overflow-hidden" style={{
+            backgroundColor: transparentBg,
+            border: '3px solid #000000',
+            borderRadius: '12px'
+          }}>
+            {/* Animated wave layers */}
             <div className="absolute inset-0">
+              <style>{`
+                @keyframes wave1 {
+                  0%, 100% { transform: translateX(0) scaleY(1); }
+                  50% { transform: translateX(-10px) scaleY(1.1); }
+                }
+                @keyframes wave2 {
+                  0%, 100% { transform: translateX(0) scaleY(1); }
+                  50% { transform: translateX(15px) scaleY(0.9); }
+                }
+                @keyframes wave3 {
+                  0%, 100% { transform: translateX(0) scaleY(1); }
+                  50% { transform: translateX(-5px) scaleY(1.05); }
+                }
+                @keyframes float1 {
+                  0%, 100% { transform: translateY(0px); opacity: 0.6; }
+                  50% { transform: translateY(-10px); opacity: 0.8; }
+                }
+              `}</style>
+
               {/* First wave layer */}
               <div
                 className="absolute bottom-0 w-full h-32"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}aa 50%, ${waveColor} 100%)`,
-                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}33 50%, ${waveColor}66 100%)`,
+                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)',
+                  animation: 'wave1 4s ease-in-out infinite'
                 }}
               />
 
               {/* Second wave layer */}
               <div
-                className="absolute bottom-0 w-full h-28 opacity-60"
+                className="absolute bottom-0 w-full h-28"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}77 50%, ${waveColor}dd 100%)`,
-                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}22 50%, ${waveColor}44 100%)`,
+                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)',
+                  animation: 'wave2 6s ease-in-out infinite reverse'
                 }}
               />
 
               {/* Third wave layer */}
               <div
-                className="absolute bottom-0 w-full h-24 opacity-40"
+                className="absolute bottom-0 w-full h-24"
                 style={{
-                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}44 60%, ${waveColor}bb 100%)`,
-                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)'
+                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}11 60%, ${waveColor}33 100%)`,
+                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)',
+                  animation: 'wave3 8s ease-in-out infinite'
                 }}
               />
             </div>
 
-            {/* Static floating bubbles/dots */}
+            {/* Animated floating bubbles */}
             <div className="absolute inset-0">
               <div
-                className="absolute w-2 h-2 rounded-full opacity-60"
+                className="absolute w-2 h-2 rounded-full"
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.4)',
                   top: '20%',
-                  left: '15%'
+                  left: '15%',
+                  animation: 'float1 3s ease-in-out infinite'
                 }}
               />
               <div
-                className="absolute w-1.5 h-1.5 rounded-full opacity-50"
+                className="absolute w-1.5 h-1.5 rounded-full"
                 style={{
                   backgroundColor: 'rgba(255,255,255,0.3)',
                   top: '60%',
-                  right: '20%'
-                }}
-              />
-              <div
-                className="absolute w-1 h-1 rounded-full opacity-70"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.5)',
-                  top: '40%',
-                  right: '10%'
-                }}
-              />
-              <div
-                className="absolute w-1.5 h-1.5 rounded-full opacity-40"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.3)',
-                  bottom: '30%',
-                  left: '25%'
+                  right: '20%',
+                  animation: 'float1 4s ease-in-out infinite 1s'
                 }}
               />
             </div>
 
             {/* Content layer */}
-            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4 text-white">
-              {/* Top time display */}
-              <div className="text-lg font-mono font-bold mb-4">
-                {displayTime}
-              </div>
+            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4" style={{ color: textColor }}>
+              <div className="text-lg font-mono font-bold mb-4">{displayTime}</div>
+              <div className="text-sm font-medium mb-4">{config.title}</div>
 
-              {/* Block title */}
-              <div className="text-sm font-medium mb-4">
-                {config.title}
-              </div>
-
-              {/* Character in center */}
               <div className="flex items-center justify-center">
                 <div className="relative">
-                  {/* Character body */}
                   <div
                     className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
                     style={{
@@ -659,11 +660,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       border: '2px solid rgba(0,0,0,0.1)'
                     }}
                   >
-                    {/* Character face - using selected emoji/icon */}
                     <div className="text-2xl">{config.emoji}</div>
                   </div>
 
-                  {/* Character details - small white elements around */}
                   <div
                     className="absolute -left-1 top-6 w-3 h-3 rounded-full opacity-80"
                     style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}
@@ -680,7 +679,12 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'habit':
         return (
-          <div className="flex items-center justify-between p-4 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="flex items-center justify-between p-4 h-24" style={{
+            backgroundColor: transparentBg,
+            color: textColor,
+            border: '3px solid #000000',
+            borderRadius: '12px'
+          }}>
             <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
               <div className="text-xl font-bold">
@@ -688,15 +692,23 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="bg-white bg-opacity-20 rounded p-1">
-              <Plus className="w-4 h-4" />
-            </div>
+            <button
+              onClick={() => setLocalCurrent(localCurrent + (config.increaseBy || 1))}
+              className="bg-black bg-opacity-20 hover:bg-opacity-30 rounded p-2 transition-all"
+            >
+              <Plus className="w-4 h-4" style={{ color: textColor }} />
+            </button>
           </div>
         );
 
       case 'countdown':
         return (
-          <div className="flex items-center justify-between p-4 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="flex items-center justify-between p-4 h-24" style={{
+            backgroundColor: transparentBg,
+            color: textColor,
+            border: '3px solid #000000',
+            borderRadius: '12px'
+          }}>
             <div className="text-2xl">{config.emoji}</div>
             <div className="text-center flex-1">
               <div className="text-xl font-mono font-bold">
@@ -704,9 +716,12 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="bg-white bg-opacity-20 rounded p-2 flex items-center">
-              <Play className="w-4 h-4" />
-            </div>
+            <button
+              onClick={() => setIsRunning(!isRunning)}
+              className="bg-black bg-opacity-20 hover:bg-opacity-30 rounded p-2 flex items-center transition-all"
+            >
+              <Play className="w-4 h-4" style={{ color: textColor }} />
+            </button>
           </div>
         );
 
@@ -715,14 +730,22 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
           Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
 
         return (
-          <div className="p-4 space-y-3 border-2 border-black rounded-xl" style={{ backgroundColor: bgColor, color: textColor }}>
+          <div className="p-4 space-y-3 h-32" style={{
+            backgroundColor: transparentBg,
+            color: textColor,
+            border: '3px solid #000000',
+            borderRadius: '12px'
+          }}>
             <div className="flex items-center justify-between">
               <div className="text-lg">{config.emoji}</div>
               <div className="text-sm">{config.title}</div>
             </div>
             <div className="text-2xl font-bold">{progressPercent}%</div>
             <div className="text-xs opacity-75">
-              13d, 23h, 59m
+              {config.startDate && config.endDate ?
+                `${Math.ceil((new Date(config.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}d remaining` :
+                '13d, 23h, 59m'
+              }
             </div>
           </div>
         );
