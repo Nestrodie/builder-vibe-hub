@@ -579,14 +579,171 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
     switch (config.type) {
       case 'time':
-        const displayTime = config.hoursplatform !== undefined && config.minutes !== undefined 
+        const displayTime = config.hoursplatform !== undefined && config.minutes !== undefined
           ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
           : currentTime;
-          
+        const bottomTime = config.hoursplatform !== undefined && config.minutes !== undefined
+          ? `${config.hoursplatform.toString().padStart(2, '0')}:${config.minutes.toString().padStart(2, '0')}:00`
+          : '02:00:00';
+
         return (
-          <div className="text-center space-y-4 p-6" style={{ backgroundColor: bgColor, color: textColor }}>
-            <div className="text-2xl">{displayTime}</div>
-            <div className="text-lg">{config.title}</div>
+          <div className="relative w-full h-48 overflow-hidden rounded-xl" style={{ backgroundColor: bgColor }}>
+            {/* Gradient background layers */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(135deg, ${bgColor}dd 0%, ${bgColor}bb 50%, ${bgColor}ee 100%)`
+              }}
+            />
+
+            {/* Animated wave layers */}
+            <div className="absolute inset-0">
+              {/* First wave layer */}
+              <div
+                className="absolute bottom-0 w-full h-32 opacity-60"
+                style={{
+                  background: `linear-gradient(180deg, transparent 0%, ${bgColor}aa 50%, ${bgColor} 100%)`,
+                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)',
+                  animation: 'wave1 4s ease-in-out infinite'
+                }}
+              />
+
+              {/* Second wave layer */}
+              <div
+                className="absolute bottom-0 w-full h-28 opacity-40"
+                style={{
+                  background: `linear-gradient(180deg, transparent 0%, ${bgColor}77 50%, ${bgColor}dd 100%)`,
+                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)',
+                  animation: 'wave2 6s ease-in-out infinite reverse'
+                }}
+              />
+
+              {/* Third wave layer */}
+              <div
+                className="absolute bottom-0 w-full h-24 opacity-30"
+                style={{
+                  background: `linear-gradient(180deg, transparent 20%, ${bgColor}44 60%, ${bgColor}bb 100%)`,
+                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)',
+                  animation: 'wave3 8s ease-in-out infinite'
+                }}
+              />
+            </div>
+
+            {/* Floating bubbles/dots */}
+            <div className="absolute inset-0">
+              <div
+                className="absolute w-2 h-2 rounded-full opacity-60"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.4)',
+                  top: '20%',
+                  left: '15%',
+                  animation: 'float1 3s ease-in-out infinite'
+                }}
+              />
+              <div
+                className="absolute w-1.5 h-1.5 rounded-full opacity-50"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.3)',
+                  top: '60%',
+                  right: '20%',
+                  animation: 'float2 4s ease-in-out infinite'
+                }}
+              />
+              <div
+                className="absolute w-1 h-1 rounded-full opacity-70"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  top: '40%',
+                  right: '10%',
+                  animation: 'float3 2.5s ease-in-out infinite'
+                }}
+              />
+              <div
+                className="absolute w-1.5 h-1.5 rounded-full opacity-40"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.3)',
+                  bottom: '30%',
+                  left: '25%',
+                  animation: 'float1 3.5s ease-in-out infinite'
+                }}
+              />
+            </div>
+
+            {/* Content layer */}
+            <div className="relative z-10 h-full flex flex-col items-center justify-between p-4 text-white">
+              {/* Top time display */}
+              <div className="text-lg font-mono font-bold mt-2">
+                {displayTime}
+              </div>
+
+              {/* Block title */}
+              <div className="text-sm font-medium">
+                {config.title}
+              </div>
+
+              {/* Character in center */}
+              <div className="flex-1 flex items-center justify-center">
+                <div className="relative">
+                  {/* Character body */}
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+                    style={{
+                      backgroundColor: 'rgba(255,255,255,0.9)',
+                      border: '2px solid rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    {/* Character face - using selected emoji/font */}
+                    <div className="text-2xl">{config.emoji}</div>
+                  </div>
+
+                  {/* Character details - small white elements around */}
+                  <div
+                    className="absolute -left-1 top-6 w-3 h-3 rounded-full opacity-80"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}
+                  />
+                  <div
+                    className="absolute -right-1 top-6 w-3 h-3 rounded-full opacity-80"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Bottom time display */}
+              <div
+                className="text-sm font-mono font-semibold px-3 py-1 rounded"
+                style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+              >
+                {bottomTime}
+              </div>
+            </div>
+
+            {/* Add styles for animations */}
+            <style jsx>{`
+              @keyframes wave1 {
+                0%, 100% { transform: translateX(0) scaleY(1); }
+                50% { transform: translateX(-10px) scaleY(1.1); }
+              }
+              @keyframes wave2 {
+                0%, 100% { transform: translateX(0) scaleY(1); }
+                50% { transform: translateX(15px) scaleY(0.9); }
+              }
+              @keyframes wave3 {
+                0%, 100% { transform: translateX(0) scaleY(1); }
+                50% { transform: translateX(-5px) scaleY(1.05); }
+              }
+              @keyframes float1 {
+                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+                50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; }
+              }
+              @keyframes float2 {
+                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; }
+                50% { transform: translateY(-8px) scale(1.2); opacity: 0.7; }
+              }
+              @keyframes float3 {
+                0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
+                50% { transform: translateY(-6px) scale(1.15); opacity: 0.9; }
+              }
+            `}</style>
           </div>
         );
 
@@ -623,9 +780,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
         );
 
       case 'progress':
-        const progressPercent = config.counters?.length ? 
+        const progressPercent = config.counters?.length ?
           Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
-        
+
         return (
           <div className="p-4 space-y-3" style={{ backgroundColor: bgColor, color: textColor }}>
             <div className="flex items-center justify-between">
