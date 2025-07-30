@@ -598,7 +598,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
         const waveColor = config.color;
 
         return (
-          <div className="relative w-full h-48 overflow-hidden rounded-xl" style={{ backgroundColor: transparentBg }}>
+          <div className="relative w-full h-48 overflow-hidden rounded-xl border-2 border-black" style={{ backgroundColor: transparentBg }}>
             {/* Static wave layers (no animation) */}
             <div className="absolute inset-0">
               {/* First wave layer */}
