@@ -203,52 +203,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white rounded-sm"></div>
-                </div>
-                <span className="text-xl font-semibold text-gray-900">Kairo</span>
-              </div>
-              <nav className="hidden md:flex space-x-8">
-                <a href="#" className="text-gray-600 hover:text-gray-900">Features</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">Pricing</a>
-                <a href="#" className="text-gray-900 font-medium border-b-2 border-teal-500">Notion blocks</a>
-              </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="text-red-500 flex items-center space-x-2 hover:text-red-600">
-                <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                  <Play className="w-2 h-2 text-white fill-white" />
-                </div>
-                <span>Watch video</span>
-              </button>
-              <button className="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600">
-                Start trial
-              </button>
-              <button className="text-gray-600 hover:text-gray-900">
-                Log in
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8 text-center">
-        <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-          Notion blocks for time, habit and goal tracking
-        </h1>
-        <p className="text-xl text-gray-600 mb-12">
-          Embed productivity blocks on any Notion page and Notion template.
-        </p>
-      </div>
-
+    <div className="min-h-screen bg-gray-50 py-8">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
