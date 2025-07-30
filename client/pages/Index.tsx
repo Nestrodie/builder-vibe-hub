@@ -708,9 +708,8 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
       case 'habit':
         return (
           <div className="flex items-center justify-between p-4 h-24 relative overflow-hidden" style={{
-            backgroundColor: transparentBg,
-            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
-            color: textColor,
+            background: `linear-gradient(135deg, ${waveColor}40, ${waveColor}60)`,
+            color: 'black',
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
@@ -727,16 +726,20 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <button
-              onClick={() => setLocalCurrent(localCurrent + (config.increaseBy || 1))}
-              className="z-10 relative rounded p-2 transition-all"
-              style={{
-                backgroundColor: `${waveColor}30`,
-                border: `1px solid ${waveColor}60`
-              }}
-            >
-              <Plus className="w-4 h-4" style={{ color: textColor }} />
-            </button>
+            <div className="flex flex-col gap-1 z-10 relative">
+              <button
+                onClick={() => setLocalCurrent(localCurrent + (config.increaseBy || 1))}
+                className="rounded p-1.5 transition-all bg-white bg-opacity-30 hover:bg-opacity-50"
+              >
+                <Plus className="w-3 h-3 text-black" />
+              </button>
+              <button
+                onClick={() => setLocalCurrent(Math.max(0, localCurrent - (config.increaseBy || 1)))}
+                className="rounded p-1.5 transition-all bg-white bg-opacity-30 hover:bg-opacity-50"
+              >
+                <Minus className="w-3 h-3 text-black" />
+              </button>
+            </div>
           </div>
         );
 
