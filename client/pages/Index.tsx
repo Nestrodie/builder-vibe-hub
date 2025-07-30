@@ -330,26 +330,8 @@ export default function Index() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {/* Selected Widget Preview */}
-                  <div className="flex justify-center">
-                    <WidgetPreview config={config} isSelected={true} />
-                  </div>
-
-                  {/* All Widget Types Grid */}
-                  <div>
-                    <h3 className="text-gray-300 text-sm font-medium mb-4">All Widget Types</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      {widgetTypes.map((type) => (
-                        <WidgetPreview
-                          key={type.id}
-                          config={{ ...config, type: type.id as WidgetType }}
-                          isSelected={selectedWidget === type.id}
-                          onClick={() => setSelectedWidget(type.id as WidgetType)}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                <div className="flex justify-center">
+                  <WidgetPreview config={config} isSelected={true} />
                 </div>
               </CardContent>
             </Card>
