@@ -209,109 +209,246 @@ export default function Index() {
                   </div>
                 </div>
 
-                {/* Widget Title */}
-                <div>
-                  <Label htmlFor="title" className="text-gray-300">Widget Title</Label>
-                  <Input
-                    id="title"
-                    value={config.title}
-                    onChange={(e) => updateConfig({ title: e.target.value })}
-                    className="bg-white/10 border-white/20 text-white"
-                    placeholder="Enter widget title"
-                  />
-                </div>
-
-                {/* Color Selection */}
-                <div>
-                  <Label className="text-gray-300 mb-3 block">Color Theme</Label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {colorOptions.map((color) => (
-                      <button
-                        key={color.value}
-                        onClick={() => updateConfig({ color: color.value })}
-                        className={cn(
-                          "p-3 rounded-xl border-2 transition-all",
-                          config.color === color.value
-                            ? "border-white scale-105"
-                            : "border-transparent hover:scale-105"
-                        )}
-                        style={{ background: `linear-gradient(135deg, ${color.value}, ${color.value}dd)` }}
-                      >
-                        <div className="text-white font-medium text-sm">{color.name}</div>
-                        {config.color === color.value && (
-                          <Check className="w-4 h-4 text-white mx-auto mt-1" />
-                        )}
-                      </button>
-                    ))}
+                {/* Dynamic Settings based on Widget Type */}
+                <div className="space-y-4">
+                  {/* Common Settings */}
+                  <div>
+                    <Label htmlFor="title" className="text-gray-300">Block Title</Label>
+                    <Input
+                      id="title"
+                      value={config.title}
+                      onChange={(e) => updateConfig({ title: e.target.value })}
+                      className="bg-white/10 border-white/20 text-white"
+                      placeholder="Enter block title"
+                    />
                   </div>
-                </div>
 
-                {/* Icon Selection */}
-                <div>
-                  <Label className="text-gray-300 mb-3 block">Icon</Label>
-                  <div className="grid grid-cols-5 gap-2">
-                    {iconOptions.map((icon) => (
+                  {/* Dark/Light Mode Toggle */}
+                  <div>
+                    <Label className="text-gray-300 mb-3 block">Mode</Label>
+                    <div className="flex gap-3">
                       <button
-                        key={icon}
-                        onClick={() => updateConfig({ icon })}
+                        onClick={() => updateConfig({ darkMode: false })}
                         className={cn(
-                          "p-3 rounded-lg border-2 text-2xl transition-all hover:scale-110",
-                          config.icon === icon
-                            ? "border-purple-500 bg-purple-500/20"
-                            : "border-white/10 bg-white/5 hover:border-white/20"
+                          "flex-1 p-3 rounded-lg border-2 transition-all",
+                          !config.darkMode
+                            ? "border-purple-500 bg-purple-500/20 text-white"
+                            : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20"
                         )}
                       >
-                        {icon}
+                        ☀️ Light Mode
                       </button>
-                    ))}
+                      <button
+                        onClick={() => updateConfig({ darkMode: true })}
+                        className={cn(
+                          "flex-1 p-3 rounded-lg border-2 transition-all",
+                          config.darkMode
+                            ? "border-purple-500 bg-purple-500/20 text-white"
+                            : "border-white/10 bg-white/5 text-gray-400 hover:border-white/20"
+                        )}
+                      >
+                        🌙 Dark Mode
+                      </button>
+                    </div>
                   </div>
-                  <Input
-                    value={config.icon}
-                    onChange={(e) => updateConfig({ icon: e.target.value })}
-                    className="mt-3 bg-white/10 border-white/20 text-white"
-                    placeholder="Or enter custom emoji/icon"
-                  />
-                </div>
 
-                {/* Widget-specific settings */}
-                {(config.type === 'counter' || config.type === 'progress') && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="value" className="text-gray-300">Current Value</Label>
-                        <Input
-                          id="value"
-                          type="number"
-                          value={config.value}
-                          onChange={(e) => updateConfig({ value: parseInt(e.target.value) || 0 })}
-                          className="bg-white/10 border-white/20 text-white"
-                        />
+                  {/* Color Selection */}
+                  <div>
+                    <Label className="text-gray-300 mb-3 block">Frame Color</Label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {colorOptions.map((color) => (
+                        <button
+                          key={color.value}
+                          onClick={() => updateConfig({ color: color.value })}
+                          className={cn(
+                            "p-3 rounded-xl border-2 transition-all",
+                            config.color === color.value
+                              ? "border-white scale-105"
+                              : "border-transparent hover:scale-105"
+                          )}
+                          style={{ background: color.value }}
+                        >
+                          <div className="text-white font-medium text-sm">{color.name}</div>
+                          {config.color === color.value && (
+                            <Check className="w-4 h-4 text-white mx-auto mt-1" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Icon/GIF Selection */}
+                  <div>
+                    <Label className="text-gray-300 mb-3 block">Icon / Animated GIF</Label>
+                    <div className="grid grid-cols-5 gap-2">
+                      {iconOptions.map((icon) => (
+                        <button
+                          key={icon}
+                          onClick={() => updateConfig({ icon })}
+                          className={cn(
+                            "p-3 rounded-lg border-2 text-2xl transition-all hover:scale-110",
+                            config.icon === icon
+                              ? "border-purple-500 bg-purple-500/20"
+                              : "border-white/10 bg-white/5 hover:border-white/20"
+                          )}
+                        >
+                          {icon}
+                        </button>
+                      ))}
+                    </div>
+                    <Input
+                      value={config.icon}
+                      onChange={(e) => updateConfig({ icon: e.target.value })}
+                      className="mt-3 bg-white/10 border-white/20 text-white"
+                      placeholder="Or enter GIF URL, emoji, or custom icon"
+                    />
+                  </div>
+
+                  {/* Widget-Specific Settings */}
+                  {config.type === 'timeblock' && (
+                    <div className="space-y-4 border-t border-white/10 pt-4">
+                      <h3 className="text-white font-medium">Time Block Settings</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="hours" className="text-gray-300">Hours</Label>
+                          <Input
+                            id="hours"
+                            type="number"
+                            min="0"
+                            max="23"
+                            value={config.hours || 0}
+                            onChange={(e) => updateConfig({ hours: parseInt(e.target.value) || 0 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="minutes" className="text-gray-300">Minutes</Label>
+                          <Input
+                            id="minutes"
+                            type="number"
+                            min="0"
+                            max="59"
+                            value={config.minutes || 0}
+                            onChange={(e) => updateConfig({ minutes: parseInt(e.target.value) || 0 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {config.type === 'habit' && (
+                    <div className="space-y-4 border-t border-white/10 pt-4">
+                      <h3 className="text-white font-medium">Habit / Wall Block Settings</h3>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <Label htmlFor="habitValue" className="text-gray-300">Current Value</Label>
+                          <Input
+                            id="habitValue"
+                            type="number"
+                            min="0"
+                            value={config.value || 0}
+                            onChange={(e) => updateConfig({ value: parseInt(e.target.value) || 0 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="habitTarget" className="text-gray-300">Goal</Label>
+                          <Input
+                            id="habitTarget"
+                            type="number"
+                            min="1"
+                            value={config.target || 10}
+                            onChange={(e) => updateConfig({ target: parseInt(e.target.value) || 1 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="habitIncrement" className="text-gray-300">Increment Step</Label>
+                          <Input
+                            id="habitIncrement"
+                            type="number"
+                            min="1"
+                            value={config.increment || 1}
+                            onChange={(e) => updateConfig({ increment: parseInt(e.target.value) || 1 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {config.type === 'countdown' && (
+                    <div className="space-y-4 border-t border-white/10 pt-4">
+                      <h3 className="text-white font-medium">Countdown Block Settings</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="countdownMinutes" className="text-gray-300">Minutes</Label>
+                          <Input
+                            id="countdownMinutes"
+                            type="number"
+                            min="0"
+                            value={config.countdownMinutes || 25}
+                            onChange={(e) => updateConfig({ countdownMinutes: parseInt(e.target.value) || 0 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="countdownSeconds" className="text-gray-300">Seconds</Label>
+                          <Input
+                            id="countdownSeconds"
+                            type="number"
+                            min="0"
+                            max="59"
+                            value={config.countdownSeconds || 0}
+                            onChange={(e) => updateConfig({ countdownSeconds: parseInt(e.target.value) || 0 })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {config.type === 'progress' && (
+                    <div className="space-y-4 border-t border-white/10 pt-4">
+                      <h3 className="text-white font-medium">Progress Block Settings</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="startDate" className="text-gray-300">Start Date</Label>
+                          <Input
+                            id="startDate"
+                            type="date"
+                            value={config.startDate || ''}
+                            onChange={(e) => updateConfig({ startDate: e.target.value })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="endDate" className="text-gray-300">End Date</Label>
+                          <Input
+                            id="endDate"
+                            type="date"
+                            value={config.endDate || ''}
+                            onChange={(e) => updateConfig({ endDate: e.target.value })}
+                            className="bg-white/10 border-white/20 text-white"
+                          />
+                        </div>
                       </div>
                       <div>
-                        <Label htmlFor="target" className="text-gray-300">Target Value</Label>
+                        <Label htmlFor="currentProgress" className="text-gray-300">Current Progress (%)</Label>
                         <Input
-                          id="target"
+                          id="currentProgress"
                           type="number"
-                          value={config.target}
-                          onChange={(e) => updateConfig({ target: parseInt(e.target.value) || 1 })}
+                          min="0"
+                          max="100"
+                          value={config.currentProgress || 0}
+                          onChange={(e) => updateConfig({ currentProgress: parseInt(e.target.value) || 0 })}
                           className="bg-white/10 border-white/20 text-white"
                         />
                       </div>
                     </div>
-                    {config.type === 'counter' && (
-                      <div>
-                        <Label htmlFor="increment" className="text-gray-300">Increment Step</Label>
-                        <Input
-                          id="increment"
-                          type="number"
-                          value={config.increment}
-                          onChange={(e) => updateConfig({ increment: parseInt(e.target.value) || 1 })}
-                          className="bg-white/10 border-white/20 text-white"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {/* Generate Button */}
                 <Button
