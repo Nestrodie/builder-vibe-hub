@@ -536,8 +536,24 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   const [timeLeft, setTimeLeft] = useState((config.countdownMinutes || 2) * 60);
 
   useEffect(() => {
-    setTimeLeft((config.countdownMinutes || 2) * 60);
-  }, [config.countdownMinutes]);
+    setTimeLeft((config.countdownMinutes || 2) * 60 + (config.seconds || 0));
+  }, [config.countdownMinutes, config.seconds]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            setIsRunning(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
