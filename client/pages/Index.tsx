@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type WidgetType = 'basic' | 'counter' | 'timer' | 'progress';
+type WidgetType = 'timeblock' | 'counter' | 'countdown' | 'progress';
 
 interface WidgetConfig {
   type: WidgetType;
