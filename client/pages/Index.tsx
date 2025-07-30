@@ -573,7 +573,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
   const renderBlock = () => {
     const rgb = hexToRgb(config.color);
-    const transparentBg = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`; // Very transparent
+    const transparentBg = config.darkMode ? 'rgba(30, 41, 59, 0.9)' : 'transparent'; // Dark mode or transparent
     const waveColor = config.color;
     const textColor = config.darkMode ? 'white' : 'black';
 
