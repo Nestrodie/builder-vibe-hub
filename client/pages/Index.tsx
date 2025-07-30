@@ -137,7 +137,7 @@ export default function Index() {
     switch (type) {
       case 'timeblock':
         return 'aspect-[5/4]'; // 5x4
-      case 'counter':
+      case 'habit':
         return 'aspect-[5/3]'; // 5x3
       case 'countdown':
         return 'aspect-[5/2]'; // 5x2
