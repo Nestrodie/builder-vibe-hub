@@ -593,50 +593,56 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             <div className="absolute inset-0">
               <style>{`
                 @keyframes wave1 {
-                  0%, 100% { transform: translateX(0) scaleY(1); }
-                  50% { transform: translateX(-10px) scaleY(1.1); }
+                  0% { transform: translateX(0%) rotate(0deg); }
+                  50% { transform: translateX(-25%) rotate(180deg); }
+                  100% { transform: translateX(-50%) rotate(360deg); }
                 }
                 @keyframes wave2 {
-                  0%, 100% { transform: translateX(0) scaleY(1); }
-                  50% { transform: translateX(15px) scaleY(0.9); }
+                  0% { transform: translateX(0%) rotate(0deg); }
+                  50% { transform: translateX(25%) rotate(-180deg); }
+                  100% { transform: translateX(50%) rotate(-360deg); }
                 }
                 @keyframes wave3 {
-                  0%, 100% { transform: translateX(0) scaleY(1); }
-                  50% { transform: translateX(-5px) scaleY(1.05); }
+                  0% { transform: translateX(0%) scaleY(1); }
+                  50% { transform: translateX(-15%) scaleY(1.1); }
+                  100% { transform: translateX(-30%) scaleY(1); }
                 }
                 @keyframes float1 {
-                  0%, 100% { transform: translateY(0px); opacity: 0.6; }
-                  50% { transform: translateY(-10px); opacity: 0.8; }
+                  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+                  50% { transform: translateY(-10px) scale(1.1); opacity: 0.9; }
                 }
               `}</style>
 
               {/* First wave layer */}
               <div
-                className="absolute bottom-0 w-full h-32"
+                className="absolute bottom-0 w-[150%] h-32"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}33 50%, ${waveColor}66 100%)`,
-                  clipPath: 'polygon(0 40%, 25% 35%, 50% 45%, 75% 35%, 100% 50%, 100% 100%, 0 100%)',
-                  animation: 'wave1 4s ease-in-out infinite'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}40 50%, ${waveColor}80 100%)`,
+                  clipPath: 'polygon(0 30%, 25% 25%, 50% 35%, 75% 25%, 100% 40%, 100% 100%, 0 100%)',
+                  animation: 'wave1 8s ease-in-out infinite',
+                  left: '-25%'
                 }}
               />
 
               {/* Second wave layer */}
               <div
-                className="absolute bottom-0 w-full h-28"
+                className="absolute bottom-0 w-[150%] h-28"
                 style={{
-                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}22 50%, ${waveColor}44 100%)`,
-                  clipPath: 'polygon(0 60%, 30% 50%, 60% 65%, 90% 45%, 100% 55%, 100% 100%, 0 100%)',
-                  animation: 'wave2 6s ease-in-out infinite reverse'
+                  background: `linear-gradient(180deg, transparent 0%, ${waveColor}30 50%, ${waveColor}60 100%)`,
+                  clipPath: 'polygon(0 50%, 30% 40%, 60% 55%, 90% 35%, 100% 45%, 100% 100%, 0 100%)',
+                  animation: 'wave2 12s ease-in-out infinite',
+                  left: '-25%'
                 }}
               />
 
               {/* Third wave layer */}
               <div
-                className="absolute bottom-0 w-full h-24"
+                className="absolute bottom-0 w-[130%] h-24"
                 style={{
-                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}11 60%, ${waveColor}33 100%)`,
-                  clipPath: 'polygon(0 70%, 20% 60%, 40% 75%, 70% 55%, 100% 65%, 100% 100%, 0 100%)',
-                  animation: 'wave3 8s ease-in-out infinite'
+                  background: `linear-gradient(180deg, transparent 20%, ${waveColor}20 60%, ${waveColor}40 100%)`,
+                  clipPath: 'polygon(0 60%, 20% 50%, 40% 65%, 70% 45%, 100% 55%, 100% 100%, 0 100%)',
+                  animation: 'wave3 6s ease-in-out infinite',
+                  left: '-15%'
                 }}
               />
             </div>
@@ -646,7 +652,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               <div
                 className="absolute w-2 h-2 rounded-full"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.4)',
+                  backgroundColor: `${waveColor}60`,
                   top: '20%',
                   left: '15%',
                   animation: 'float1 3s ease-in-out infinite'
@@ -655,10 +661,19 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               <div
                 className="absolute w-1.5 h-1.5 rounded-full"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.3)',
+                  backgroundColor: `${waveColor}40`,
                   top: '60%',
                   right: '20%',
                   animation: 'float1 4s ease-in-out infinite 1s'
+                }}
+              />
+              <div
+                className="absolute w-1 h-1 rounded-full"
+                style={{
+                  backgroundColor: `${waveColor}50`,
+                  top: '40%',
+                  left: '70%',
+                  animation: 'float1 5s ease-in-out infinite 2s'
                 }}
               />
             </div>
