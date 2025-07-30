@@ -57,7 +57,7 @@ const widgetTypes = [
 
 export default function Index() {
   const [config, setConfig] = useState<WidgetConfig>({
-    type: 'basic',
+    type: 'timeblock',
     title: 'Daily Goal',
     color: '#8B5CF6',
     icon: '🚀',
@@ -67,7 +67,7 @@ export default function Index() {
     increment: 1,
   });
 
-  const [selectedWidget, setSelectedWidget] = useState<WidgetType>('basic');
+  const [selectedWidget, setSelectedWidget] = useState<WidgetType>('timeblock');
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [copied, setCopied] = useState(false);
 
