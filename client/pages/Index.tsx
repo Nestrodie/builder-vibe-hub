@@ -65,9 +65,9 @@ const iconOptions = ['🚀', '📚', '💪', '🎯', '⏰', '🌟', '💻', '�
 
 const widgetTypes = [
   { id: 'timeblock', name: 'Time Block', icon: Clock, description: 'Display current time with timer' },
-  { id: 'counter', name: 'Habit Block', icon: Target, description: 'Goal tracker with +/- controls' },
-  { id: 'countdown', name: 'CountDown Block', icon: Timer, description: 'Countdown timer with start/stop' },
-  { id: 'progress', name: 'Progress Block', icon: TrendingUp, description: 'Progress bar with percentage' },
+  { id: 'habit', name: 'Habit / Wall Block', icon: Target, description: 'Goal tracker with +/- controls and fireworks' },
+  { id: 'countdown', name: 'Countdown Block', icon: Timer, description: 'Countdown timer with start/stop' },
+  { id: 'progress', name: 'Progress Block', icon: TrendingUp, description: 'Progress tracking with dates' },
 ];
 
 export default function Index() {
