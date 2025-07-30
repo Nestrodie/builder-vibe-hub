@@ -719,14 +719,21 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'habit':
         return (
-          <div className="flex items-center justify-between p-4 h-24" style={{
+          <div className="flex items-center justify-between p-4 h-24 relative overflow-hidden" style={{
             backgroundColor: transparentBg,
+            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
             color: textColor,
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            <div className="text-2xl">{config.emoji}</div>
-            <div className="text-center flex-1">
+            <div className="text-2xl z-10 relative">
+              {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
+                <img src={config.emoji} alt="Icon" className="w-8 h-8 object-cover rounded" />
+              ) : (
+                config.emoji
+              )}
+            </div>
+            <div className="text-center flex-1 z-10 relative">
               <div className="text-xl font-bold">
                 {localCurrent}/{config.goal || 2}
               </div>
@@ -734,7 +741,11 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             </div>
             <button
               onClick={() => setLocalCurrent(localCurrent + (config.increaseBy || 1))}
-              className="bg-black bg-opacity-20 hover:bg-opacity-30 rounded p-2 transition-all"
+              className="z-10 relative rounded p-2 transition-all"
+              style={{
+                backgroundColor: `${waveColor}30`,
+                border: `1px solid ${waveColor}60`
+              }}
             >
               <Plus className="w-4 h-4" style={{ color: textColor }} />
             </button>
@@ -743,14 +754,21 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'countdown':
         return (
-          <div className="flex items-center justify-between p-4 h-24" style={{
+          <div className="flex items-center justify-between p-4 h-24 relative overflow-hidden" style={{
             backgroundColor: transparentBg,
+            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
             color: textColor,
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            <div className="text-2xl">{config.emoji}</div>
-            <div className="text-center flex-1">
+            <div className="text-2xl z-10 relative">
+              {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
+                <img src={config.emoji} alt="Icon" className="w-8 h-8 object-cover rounded" />
+              ) : (
+                config.emoji
+              )}
+            </div>
+            <div className="text-center flex-1 z-10 relative">
               <div className="text-xl font-mono font-bold">
                 {formatTime(timeLeft)}
               </div>
@@ -758,9 +776,17 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             </div>
             <button
               onClick={() => setIsRunning(!isRunning)}
-              className="bg-black bg-opacity-20 hover:bg-opacity-30 rounded p-2 flex items-center transition-all"
+              className="z-10 relative rounded p-2 flex items-center transition-all"
+              style={{
+                backgroundColor: `${waveColor}30`,
+                border: `1px solid ${waveColor}60`
+              }}
             >
-              <Play className="w-4 h-4" style={{ color: textColor }} />
+              {isRunning ? (
+                <div className="w-4 h-4 bg-current rounded-sm" style={{ color: textColor }} />
+              ) : (
+                <Play className="w-4 h-4" style={{ color: textColor }} />
+              )}
             </button>
           </div>
         );
@@ -770,22 +796,39 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
           Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
 
         return (
-          <div className="p-4 space-y-3 h-32" style={{
+          <div className="p-4 space-y-3 h-32 relative overflow-hidden" style={{
             backgroundColor: transparentBg,
+            background: `linear-gradient(135deg, ${waveColor}15, ${waveColor}25)`,
             color: textColor,
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            <div className="flex items-center justify-between">
-              <div className="text-lg">{config.emoji}</div>
+            <div className="flex items-center justify-between z-10 relative">
+              <div className="text-lg">
+                {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
+                  <img src={config.emoji} alt="Icon" className="w-6 h-6 object-cover rounded" />
+                ) : (
+                  config.emoji
+                )}
+              </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="text-2xl font-bold">{progressPercent}%</div>
-            <div className="text-xs opacity-75">
+            <div className="text-2xl font-bold z-10 relative">{progressPercent}%</div>
+            <div className="text-xs opacity-75 z-10 relative">
               {config.startDate && config.endDate ?
                 `${Math.ceil((new Date(config.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}d remaining` :
                 '13d, 23h, 59m'
               }
+            </div>
+            {/* Progress bar */}
+            <div className="w-full bg-black bg-opacity-20 rounded-full h-2 z-10 relative">
+              <div
+                className="h-2 rounded-full transition-all duration-500"
+                style={{
+                  width: `${progressPercent}%`,
+                  backgroundColor: waveColor
+                }}
+              />
             </div>
           </div>
         );
