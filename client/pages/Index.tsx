@@ -88,7 +88,7 @@ export default function Index() {
   const [config, setConfig] = useState<BlockConfig>({
     type: 'time',
     title: 'Block title',
-    emoji: '🐸',
+    emoji: '⏰',
     color: '#10b981',
     darkMode: false,
     hoursplatform: 0,
