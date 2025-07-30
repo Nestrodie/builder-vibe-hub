@@ -433,7 +433,7 @@ export default function Index() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {config.type === 'time' ? 'Icon' : 'Icon'}
               </label>
-              <div className="grid grid-cols-7 gap-2">
+              <div className="grid grid-cols-7 gap-2 mb-3">
                 {(config.type === 'time' ? timeBlockIcons : emojiIcons).map((icon) => (
                   <button
                     key={icon}
@@ -449,6 +449,35 @@ export default function Index() {
                     {icon}
                   </button>
                 ))}
+              </div>
+
+              {/* Custom Icon Upload */}
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={config.emoji.startsWith('http') ? config.emoji : ''}
+                  onChange={(e) => setConfig(prev => ({ ...prev, emoji: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+                  placeholder="Or paste image/GIF URL"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        if (event.target?.result) {
+                          setConfig(prev => ({ ...prev, emoji: event.target!.result as string }));
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+                />
+                <p className="text-xs text-gray-500">Upload your own image or GIF</p>
               </div>
             </div>
 
