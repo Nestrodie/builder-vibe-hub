@@ -740,23 +740,36 @@ function WidgetPreview({ config, isSelected = false, onClick }: WidgetPreviewPro
     <div
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-2xl p-6 cursor-pointer transition-all duration-300",
+        "relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300",
         "flex flex-col items-center justify-center text-center",
         getWidgetSize(config.type),
         isSelected && "ring-2 ring-white/50 scale-105",
         !isSelected && "hover:scale-105"
       )}
       style={{
-        background: `linear-gradient(135deg, ${config.color}, ${config.color}bb)`,
+        background: config.color,
+        border: `4px solid ${config.color}`,
       }}
     >
-      {/* Water effect background */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+      {/* Inner transparent container */}
+      <div
+        className={cn(
+          "absolute inset-2 rounded-xl transition-all duration-300",
+          config.darkMode
+            ? "bg-black/10 backdrop-blur-sm border border-white/10"
+            : "bg-white/10 backdrop-blur-sm border border-black/10"
+        )}
+      />
+
+      {/* Water animation effect */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent animate-float" />
+        <div className="absolute -top-1/3 -right-1/3 w-2/3 h-2/3 bg-white/5 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute -bottom-1/3 -left-1/3 w-2/3 h-2/3 bg-white/5 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
       </div>
-      
+
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full w-full p-4">
         {renderWidgetContent()}
       </div>
     </div>
