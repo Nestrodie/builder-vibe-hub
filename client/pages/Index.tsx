@@ -663,7 +663,10 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               className="z-10 relative rounded p-2 flex items-center transition-all bg-white bg-opacity-30 hover:bg-opacity-50"
             >
               {isRunning ? (
-                <div className="w-4 h-4 bg-black rounded-sm" />
+                <div className="flex gap-0.5 items-center">
+                  <div className="w-1 h-4 bg-black rounded-sm" />
+                  <div className="w-1 h-4 bg-black rounded-sm" />
+                </div>
               ) : (
                 <Play className="w-4 h-4 text-black" />
               )}
