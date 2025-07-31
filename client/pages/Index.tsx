@@ -127,8 +127,8 @@ export default function Index() {
     if (selectedType) {
       setConfig(prev => ({
         ...prev,
-        type: selectedBlock,
-        emoji: selectedType.emoji
+        type: selectedBlock
+        // Убрали emoji: selectedType.emoji чтобы сохранять пользовательские изображения
       }));
     }
   }, [selectedBlock]);
