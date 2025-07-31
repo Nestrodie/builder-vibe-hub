@@ -252,7 +252,7 @@ export default function Index() {
             <div>
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Название</label>
+              }`}>Назв��ние</label>
               <input
                 type="text"
                 value={config.title}
@@ -328,7 +328,7 @@ export default function Index() {
                 <div>
                   <label className={`block text-sm font-medium mb-2 text-center ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>Goal</label>
+                  }`}>Цель</label>
                   <input
                     type="number"
                     value={config.goal || 2}
@@ -346,23 +346,35 @@ export default function Index() {
             {config.type === 'countdown' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Minutes</label>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Минуты</label>
                   <input
                     type="number"
                     value={config.countdownMinutes || 2}
                     onChange={(e) => setConfig(prev => ({ ...prev, countdownMinutes: parseInt(e.target.value) || 2 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
+                    }`}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Seconds</label>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Секунды</label>
                   <input
                     type="number"
                     min="0"
                     max="59"
                     value={config.seconds || 0}
                     onChange={(e) => setConfig(prev => ({ ...prev, seconds: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
+                    }`}
                   />
                 </div>
               </>
@@ -371,21 +383,33 @@ export default function Index() {
             {config.type === 'progress' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start</label>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Начало</label>
                   <input
                     type="datetime-local"
                     value={config.startDate ? `${config.startDate}T10:41` : '2024-07-30T10:41'}
                     onChange={(e) => setConfig(prev => ({ ...prev, startDate: e.target.value.split('T')[0] }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
+                    }`}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End</label>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Конец</label>
                   <input
                     type="datetime-local"
                     value={config.endDate ? `${config.endDate}T10:41` : '2024-08-13T10:41'}
                     onChange={(e) => setConfig(prev => ({ ...prev, endDate: e.target.value.split('T')[0] }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
+                    }`}
                   />
                 </div>
 
