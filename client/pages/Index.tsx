@@ -266,26 +266,26 @@ export default function Index() {
             )}
 
             {config.type === 'habit' && (
-              <>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Increase by</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 text-center">Increase by</label>
                   <input
                     type="number"
                     value={config.increaseBy || 1}
                     onChange={(e) => setConfig(prev => ({ ...prev, increaseBy: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-center"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Goal</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 text-center">Goal</label>
                   <input
                     type="number"
                     value={config.goal || 2}
                     onChange={(e) => setConfig(prev => ({ ...prev, goal: parseInt(e.target.value) || 2 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-center"
                   />
                 </div>
-              </>
+              </div>
             )}
 
             {config.type === 'countdown' && (
