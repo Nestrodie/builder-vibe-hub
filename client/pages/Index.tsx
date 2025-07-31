@@ -620,18 +620,18 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="flex gap-3 z-10 relative items-center">
+            <div className="flex gap-2 z-10 relative items-center">
               <button
                 onClick={() => setLocalCurrent(Math.max(0, localCurrent - (config.increaseBy || 1)))}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 bg-white bg-opacity-40 hover:bg-opacity-60 hover:scale-110 shadow-md hover:shadow-lg backdrop-blur-sm"
+                className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 bg-white bg-opacity-30 hover:bg-opacity-50 shadow-sm"
               >
-                <Minus className="w-3 h-3 text-black" />
+                <Minus className="w-3 h-3 text-black opacity-70" />
               </button>
               <button
                 onClick={() => setLocalCurrent(localCurrent + (config.increaseBy || 1))}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 bg-black bg-opacity-90 hover:bg-opacity-100 hover:scale-110 shadow-xl hover:shadow-2xl"
+                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 bg-black bg-opacity-85 hover:bg-opacity-95 shadow-lg"
               >
-                <Plus className="w-5 h-5 text-white" />
+                <Plus className="w-4 h-4 text-white" />
               </button>
             </div>
           </div>
