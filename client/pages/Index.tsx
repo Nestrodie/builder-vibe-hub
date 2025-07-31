@@ -39,29 +39,29 @@ interface BlockConfig {
 const blockTypes = [
   {
     id: 'time',
-    name: 'Time Block',
-    description: 'Track time with custom settings',
+    name: 'Блок времени',
+    description: 'Отслеживайте время с настраиваемыми параметрами',
     color: '#10b981',
     emoji: '🐸'
   },
   {
     id: 'habit',
-    name: 'Habit/Goal Block', 
-    description: 'Build better habits day by day',
+    name: 'Блок привычек/целей',
+    description: 'Формируйте полезные привычки день за днем',
     color: '#10b981',
     emoji: '🐼'
   },
   {
     id: 'countdown',
-    name: 'Countdown Block',
-    description: 'Focus with pomodoro technique',
+    name: 'Блок таймера',
+    description: 'Концентрируйтесь с помощью техники помодоро',
     color: '#10b981',
     emoji: '🐼'
   },
   {
     id: 'progress',
-    name: 'Progress Block',
-    description: 'Track progress towards your goals',
+    name: 'Блок прогресса',
+    description: 'Отслеживайте прогресс �� достижению целей',
     color: '#10b981',
     emoji: '📊'
   }
@@ -232,7 +232,7 @@ export default function Index() {
             <div>
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Type</label>
+              }`}>Тип</label>
               <select
                 value={selectedBlock}
                 onChange={(e) => setSelectedBlock(e.target.value as WidgetType)}
@@ -252,7 +252,7 @@ export default function Index() {
             <div>
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Title</label>
+              }`}>Название</label>
               <input
                 type="text"
                 value={config.title}
@@ -262,7 +262,7 @@ export default function Index() {
                     ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
                     : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
                 }`}
-                placeholder="Block title"
+                placeholder="Название блока"
               />
             </div>
 
@@ -272,7 +272,7 @@ export default function Index() {
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>Hours platform</label>
+                  }`}>Часы</label>
                   <select
                     value={config.hoursplatform || 0}
                     onChange={(e) => setConfig(prev => ({ ...prev, hoursplatform: parseInt(e.target.value) }))}
@@ -290,7 +290,7 @@ export default function Index() {
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>Minutes</label>
+                  }`}>Минуты</label>
                   <select
                     value={config.minutes || 0}
                     onChange={(e) => setConfig(prev => ({ ...prev, minutes: parseInt(e.target.value) }))}
@@ -313,7 +313,7 @@ export default function Index() {
                 <div>
                   <label className={`block text-sm font-medium mb-2 text-center ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>Increase by</label>
+                  }`}>Увеличить на</label>
                   <input
                     type="number"
                     value={config.increaseBy || 1}
