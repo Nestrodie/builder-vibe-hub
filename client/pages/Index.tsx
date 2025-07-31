@@ -514,27 +514,40 @@ export default function Index() {
                   }`}
                   placeholder="Or paste image/GIF URL"
                 />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        if (event.target?.result) {
-                          setConfig(prev => ({ ...prev, emoji: event.target!.result as string }));
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm ${
-                    isDarkMode
-                      ? 'border-gray-600 bg-gray-700 text-white'
-                      : 'border-gray-300 bg-white text-gray-900'
-                  }`}
-                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          if (event.target?.result) {
+                            setConfig(prev => ({ ...prev, emoji: event.target!.result as string }));
+                          }
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    id="file-upload"
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className={`w-full px-4 py-3 border-2 border-dashed rounded-lg text-center cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 hover:border-teal-400 ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 17L2 19C2 20.1046 2.89543 21 4 21L20 21C21.1046 21 22 20.1046 22 19L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    <span className="text-sm font-medium">Choose image</span>
+                  </label>
+                </div>
                 <p className={`text-xs ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-500'
                 }`}>Upload your own image or GIF</p>
