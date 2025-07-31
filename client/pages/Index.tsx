@@ -695,7 +695,39 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="text-2xl font-bold z-10 relative">{progressPercent}%</div>
+            <div className="flex items-center justify-between z-10 relative">
+              <div className="text-2xl font-bold">{progressPercent}%</div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    if (config.counters && config.counters.length > 0) {
+                      const avgValue = config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length;
+                      const newAvg = Math.max(0, avgValue - 5);
+                      setConfig(prev => ({
+                        ...prev,
+                        counters: prev.counters?.map(c => ({ ...c, value: Math.max(0, c.value - 5) }))
+                      }));
+                    }
+                  }}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 bg-white bg-opacity-40 hover:bg-opacity-60 hover:scale-110 shadow-sm"
+                >
+                  <Minus className="w-2.5 h-2.5 text-black" />
+                </button>
+                <button
+                  onClick={() => {
+                    if (config.counters && config.counters.length > 0) {
+                      setConfig(prev => ({
+                        ...prev,
+                        counters: prev.counters?.map(c => ({ ...c, value: Math.min(100, c.value + 5) }))
+                      }));
+                    }
+                  }}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 bg-black bg-opacity-80 hover:bg-opacity-100 hover:scale-110 shadow-md"
+                >
+                  <Plus className="w-2.5 h-2.5 text-white" />
+                </button>
+              </div>
+            </div>
             <div className="text-xs opacity-75 z-10 relative">
               {config.startDate && config.endDate ?
                 `${Math.ceil((new Date(config.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}d remaining` :
@@ -703,9 +735,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
               }
             </div>
             {/* Progress bar */}
-            <div className="w-full bg-black bg-opacity-20 rounded-full h-2 z-10 relative">
+            <div className="w-full bg-black bg-opacity-20 rounded-full h-3 z-10 relative shadow-inner">
               <div
-                className="h-2 rounded-full transition-all duration-500 bg-black"
+                className="h-3 rounded-full transition-all duration-700 bg-black shadow-sm"
                 style={{
                   width: `${progressPercent}%`
                 }}
