@@ -556,7 +556,9 @@ export default function Index() {
 
           {/* Preview */}
           <div className="lg:sticky lg:top-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Preview</h2>
+            <h2 className={`text-2xl font-semibold mb-6 ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>Preview</h2>
             <BlockPreview config={config} currentTime={currentTime} />
           </div>
         </div>
