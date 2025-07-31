@@ -455,14 +455,18 @@ export default function Index() {
 
             {/* Color Palette */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
+              <label className={`block text-sm font-medium mb-2 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Color</label>
               <div className="grid grid-cols-7 gap-2">
                 {colorOptions.map((color) => (
                   <button
                     key={color}
                     onClick={() => setConfig(prev => ({ ...prev, color }))}
                     className={`w-8 h-8 rounded-lg border-2 transition-all ${
-                      config.color === color ? 'border-gray-400 scale-110' : 'border-gray-200'
+                      config.color === color
+                        ? 'border-teal-500 scale-110'
+                        : isDarkMode ? 'border-gray-600' : 'border-gray-200'
                     }`}
                     style={{ backgroundColor: color }}
                   />
@@ -472,7 +476,9 @@ export default function Index() {
 
             {/* Icon/Font Selector */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 {config.type === 'time' ? 'Icon' : 'Icon'}
               </label>
               <div className="grid grid-cols-7 gap-2 mb-3">
@@ -485,7 +491,9 @@ export default function Index() {
                       ...(config.type === 'time' ? { font: icon } : {})
                     }))}
                     className={`w-8 h-8 rounded-lg border-2 transition-all text-lg flex items-center justify-center ${
-                      config.emoji === icon ? 'border-gray-400 bg-gray-100' : 'border-gray-200 hover:border-gray-300'
+                      config.emoji === icon
+                        ? `border-teal-500 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`
+                        : `${isDarkMode ? 'border-gray-600 hover:border-gray-500' : 'border-gray-200 hover:border-gray-300'}`
                     }`}
                   >
                     {icon}
@@ -499,7 +507,11 @@ export default function Index() {
                   type="text"
                   value={config.emoji.startsWith('http') ? config.emoji : ''}
                   onChange={(e) => setConfig(prev => ({ ...prev, emoji: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                      : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                  }`}
                   placeholder="Or paste image/GIF URL"
                 />
                 <input
@@ -517,9 +529,15 @@ export default function Index() {
                       reader.readAsDataURL(file);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-gray-700 text-white'
+                      : 'border-gray-300 bg-white text-gray-900'
+                  }`}
                 />
-                <p className="text-xs text-gray-500">Upload your own image or GIF</p>
+                <p className={`text-xs ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                }`}>Upload your own image or GIF</p>
               </div>
             </div>
 
