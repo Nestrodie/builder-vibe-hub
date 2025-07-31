@@ -74,7 +74,7 @@ const colorOptions = [
 ];
 
 const timeBlockIcons = [
-  '🐸', '🐼', '🐻', '🐱', '🐶', '🦊', '🐰', '🐨', '🐵'
+  '🐸', '🐼', '🐻', '🐱', '🐶', '🦊', '���', '🐨', '🐵'
 ];
 
 const emojiIcons = [
@@ -660,15 +660,15 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             </div>
             <button
               onClick={() => setIsRunning(!isRunning)}
-              className="z-10 relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 bg-white bg-opacity-50 hover:bg-opacity-70 hover:scale-110 shadow-lg hover:shadow-xl backdrop-blur-sm"
+              className="z-10 relative w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 bg-white bg-opacity-50 hover:bg-opacity-70 shadow-lg"
             >
               {isRunning ? (
-                <div className="flex gap-1 items-center">
-                  <div className="w-1.5 h-5 bg-black rounded-full" />
-                  <div className="w-1.5 h-5 bg-black rounded-full" />
+                <div className="flex gap-0.5 items-center">
+                  <div className="w-1 h-4 bg-black rounded-sm" />
+                  <div className="w-1 h-4 bg-black rounded-sm" />
                 </div>
               ) : (
-                <Play className="w-5 h-5 text-black ml-0.5" />
+                <Play className="w-4 h-4 text-black" />
               )}
             </button>
           </div>
