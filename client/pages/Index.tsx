@@ -85,6 +85,7 @@ const emojiIcons = [
 
 export default function Index() {
   const [selectedBlock, setSelectedBlock] = useState<WidgetType>('time');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [config, setConfig] = useState<BlockConfig>({
     type: 'time',
     title: 'Block title',
