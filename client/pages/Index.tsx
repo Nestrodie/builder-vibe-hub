@@ -204,7 +204,23 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen py-8" style={{ background: 'transparent' }}>
+    <div className={`min-h-screen py-8 transition-colors duration-300 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
+      {/* Theme Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className={`p-3 rounded-lg transition-all duration-300 shadow-lg ${
+            isDarkMode
+              ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700'
+              : 'bg-white text-gray-700 hover:bg-gray-100'
+          }`}
+        >
+          {isDarkMode ? '☀️' : '🌙'}
+        </button>
+      </div>
+
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
