@@ -676,7 +676,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'progress':
         const progressPercent = config.counters?.length ?
-          Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length) * 10) : 0;
+          Math.round((config.counters.reduce((sum, c) => sum + c.value, 0) / config.counters.length)) : 0;
 
         return (
           <div className="p-4 space-y-3 h-32 relative overflow-hidden" style={{
