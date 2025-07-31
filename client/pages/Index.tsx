@@ -252,7 +252,7 @@ export default function Index() {
             <div>
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Назв��ние</label>
+              }`}>Название</label>
               <input
                 type="text"
                 value={config.title}
@@ -415,18 +415,30 @@ export default function Index() {
 
                 {/* Counters Table */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Counters</label>
-                  <div className="border border-gray-300 rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-3 py-2 border-b border-gray-300">
-                      <div className="grid grid-cols-5 gap-2 text-xs font-medium text-gray-700">
-                        <span>TITLE</span>
-                        <span>TYPE</span>
-                        <span>VALUE</span>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Счетчики</label>
+                  <div className={`border rounded-lg overflow-hidden ${
+                    isDarkMode ? 'border-gray-600' : 'border-gray-300'
+                  }`}>
+                    <div className={`px-3 py-2 border-b ${
+                      isDarkMode
+                        ? 'bg-gray-700 border-gray-600'
+                        : 'bg-gray-50 border-gray-300'
+                    }`}>
+                      <div className={`grid grid-cols-5 gap-2 text-xs font-medium ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        <span>НАЗВАНИЕ</span>
+                        <span>ТИП</span>
+                        <span>ЗНАЧЕНИЕ</span>
                         <span></span>
                         <span></span>
                       </div>
                     </div>
-                    <div className="divide-y divide-gray-200">
+                    <div className={`divide-y ${
+                      isDarkMode ? 'divide-gray-600' : 'divide-gray-200'
+                    }`}>
                       {config.counters?.map((counter) => (
                         <div key={counter.id} className="px-3 py-2">
                           <div className="grid grid-cols-5 gap-2 items-center">
@@ -435,16 +447,16 @@ export default function Index() {
                               value={counter.title}
                               onChange={(e) => updateCounter(counter.id, 'title', e.target.value)}
                               className="text-xs border border-gray-200 rounded px-2 py-1"
-                              placeholder="Title"
+                              placeholder="Название"
                             />
                             <select
                               value={counter.type}
                               onChange={(e) => updateCounter(counter.id, 'type', e.target.value)}
                               className="text-xs border border-gray-200 rounded px-2 py-1"
                             >
-                              <option value="Count">Count</option>
-                              <option value="Time">Time</option>
-                              <option value="Progress">Progress</option>
+                              <option value="Count">Счетчик</option>
+                              <option value="Time">Время</option>
+                              <option value="Progress">Прогресс</option>
                             </select>
                             <input
                               type="number"
@@ -462,12 +474,14 @@ export default function Index() {
                         </div>
                       ))}
                     </div>
-                    <div className="px-3 py-2 border-t border-gray-300">
+                    <div className={`px-3 py-2 border-t ${
+                      isDarkMode ? 'border-gray-600' : 'border-gray-300'
+                    }`}>
                       <button
                         onClick={addCounter}
                         className="text-sm text-teal-600 hover:text-teal-800"
                       >
-                        Add
+                        Добавить
                       </button>
                     </div>
                   </div>
@@ -481,7 +495,7 @@ export default function Index() {
             <div>
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Color</label>
+              }`}>Цвет</label>
               <div className="grid grid-cols-7 gap-2">
                 {colorOptions.map((color) => (
                   <button
@@ -503,7 +517,7 @@ export default function Index() {
               <label className={`block text-sm font-medium mb-2 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
               }`}>
-                {config.type === 'time' ? 'Icon' : 'Icon'}
+                {config.type === 'time' ? 'Иконка' : 'Иконка'}
               </label>
               <div className="grid grid-cols-7 gap-2 mb-3">
                 {(config.type === 'time' ? timeBlockIcons : emojiIcons).map((icon) => (
@@ -536,7 +550,7 @@ export default function Index() {
                       ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
                       : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
                   }`}
-                  placeholder="Or paste image/GIF URL"
+                  placeholder="Или вставьте ссылку на изображение/GIF"
                 />
                 <div className="relative">
                   <input
@@ -569,12 +583,12 @@ export default function Index() {
                       <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M2 17L2 19C2 20.1046 2.89543 21 4 21L20 21C21.1046 21 22 20.1046 22 19L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                     </svg>
-                    <span className="text-sm font-medium">Choose image</span>
+                    <span className="text-sm font-medium">Выбрать изображение</span>
                   </label>
                 </div>
                 <p className={`text-xs ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                }`}>Upload your own image or GIF</p>
+                }`}>Загрузите свое изображение или GIF</p>
               </div>
             </div>
 
@@ -583,28 +597,38 @@ export default function Index() {
               onClick={generateUrl}
               className="w-full bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition-colors"
             >
-              Generate embed link
+              Создать ссылку для вставки
             </button>
 
             {/* Generated URL */}
             {generatedUrl && (
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Embed link</label>
+                <label className={`block text-sm font-medium ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>Ссылка для вставки</label>
                 <div className="flex space-x-2">
                   <input
                     type="text"
                     value={generatedUrl}
                     readOnly
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm"
+                    className={`flex-1 px-3 py-2 border rounded-lg font-mono text-sm ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-gray-700 text-white'
+                        : 'border-gray-300 bg-gray-50 text-gray-900'
+                    }`}
                   />
                   <button
                     onClick={copyUrl}
-                    className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
+                    className={`px-3 py-2 border rounded-lg transition-colors ${
+                      isDarkMode
+                        ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                        : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+                    }`}
                   >
                     {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-600" />}
                   </button>
                 </div>
-                {copied && <p className="text-sm text-green-600">✓ Copied to clipboard</p>}
+                {copied && <p className="text-sm text-green-600">✓ Скопиров��но в буфер обмена</p>}
               </div>
             )}
           </div>
@@ -613,7 +637,7 @@ export default function Index() {
           <div className="lg:sticky lg:top-8">
             <h2 className={`text-2xl font-semibold mb-6 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>Preview</h2>
+            }`}>Предварительный просмотр</h2>
             <BlockPreview config={config} currentTime={currentTime} />
           </div>
         </div>
