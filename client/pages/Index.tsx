@@ -600,26 +600,31 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
 
       case 'habit':
         return (
-          <div className="flex items-center justify-between p-4 h-24 relative overflow-hidden" style={{
+          <div className="relative p-4 h-24 overflow-hidden" style={{
             background: `linear-gradient(135deg, ${waveColor}40, ${waveColor}60)`,
             color: 'black',
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            <div className="text-2xl z-10 relative">
+            {/* Icon on the left */}
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-2xl z-10">
               {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
                 <img src={config.emoji} alt="Icon" className="w-8 h-8 object-cover rounded" />
               ) : (
                 config.emoji
               )}
             </div>
-            <div className="text-center flex-1 z-10 relative">
+
+            {/* Centered content */}
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10">
               <div className="text-xl font-bold">
                 {localCurrent}/{config.goal || 2}
               </div>
               <div className="text-sm">{config.title}</div>
             </div>
-            <div className="flex gap-2 z-10 relative items-center">
+
+            {/* Buttons on the right */}
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex gap-2 z-10 items-center">
               <button
                 onClick={() => setLocalCurrent(Math.max(0, localCurrent - (config.increaseBy || 1)))}
                 className="w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-200 bg-white bg-opacity-30 hover:bg-opacity-50 shadow-sm"
