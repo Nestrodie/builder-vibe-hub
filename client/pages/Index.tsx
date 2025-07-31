@@ -225,14 +225,22 @@ export default function Index() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Configuration Panel */}
-          <div className="max-w-md space-y-6">
+          <div className={`max-w-md space-y-6 p-6 rounded-lg transition-colors duration-300 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          } shadow-lg`}>
             {/* Block Type Selector */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <label className={`block text-sm font-medium mb-2 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Type</label>
               <select
                 value={selectedBlock}
                 onChange={(e) => setSelectedBlock(e.target.value as WidgetType)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                  isDarkMode
+                    ? 'border-gray-600 bg-gray-700 text-white'
+                    : 'border-gray-300 bg-white text-gray-900'
+                }`}
               >
                 {blockTypes.map((type) => (
                   <option key={type.id} value={type.id}>{type.name}</option>
@@ -242,12 +250,18 @@ export default function Index() {
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <label className={`block text-sm font-medium mb-2 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Title</label>
               <input
                 type="text"
                 value={config.title}
                 onChange={(e) => setConfig(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
+                  isDarkMode
+                    ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                    : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                }`}
                 placeholder="Block title"
               />
             </div>
