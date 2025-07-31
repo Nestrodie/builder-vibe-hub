@@ -577,10 +577,10 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
           }}>
             {/* Content layer */}
             <div className="relative z-10 h-full flex flex-col items-center justify-center p-4 text-black">
-              <div className="text-2xl font-mono font-bold mb-2">{displayTime}</div>
+              <div className="text-2xl font-mono font-bold">{displayTime}</div>
               <div className="text-sm font-medium mb-4">{config.title}</div>
 
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center mt-4">
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full flex items-center justify-center">
                     {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
