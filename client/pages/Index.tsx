@@ -74,7 +74,7 @@ const colorOptions = [
 ];
 
 const timeBlockIcons = [
-  '🐸', '🐼', '🐻', '🐱', '🐶', '🦊', '���', '🐨', '🐵'
+  '🐸', '🐼', '🐻', '🐱', '🐶', '🦊', '🐰', '🐨', '🐵'
 ];
 
 const emojiIcons = [
@@ -709,9 +709,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       }));
                     }
                   }}
-                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 bg-white bg-opacity-40 hover:bg-opacity-60 hover:scale-110 shadow-sm"
+                  className="w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200 bg-white bg-opacity-25 hover:bg-opacity-40 shadow-sm"
                 >
-                  <Minus className="w-2.5 h-2.5 text-black" />
+                  <Minus className="w-2.5 h-2.5 text-black opacity-60" />
                 </button>
                 <button
                   onClick={() => {
@@ -722,9 +722,9 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                       }));
                     }
                   }}
-                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 bg-black bg-opacity-80 hover:bg-opacity-100 hover:scale-110 shadow-md"
+                  className="w-7 h-7 rounded-md flex items-center justify-center transition-all duration-200 bg-black bg-opacity-80 hover:bg-opacity-95 shadow-md"
                 >
-                  <Plus className="w-2.5 h-2.5 text-white" />
+                  <Plus className="w-3 h-3 text-white" />
                 </button>
               </div>
             </div>
