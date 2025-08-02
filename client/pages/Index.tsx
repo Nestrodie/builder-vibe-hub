@@ -49,7 +49,7 @@ const blockTypes = [
     name: 'Блок привычек/целей',
     description: 'Формируйте полезные привычки день за днем',
     color: '#10b981',
-    emoji: '🐼'
+    emoji: '���'
   },
   {
     id: 'countdown',
@@ -628,7 +628,7 @@ export default function Index() {
                     {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-600" />}
                   </button>
                 </div>
-                {copied && <p className="text-sm text-green-600">✓ Скопиров��но в буфер обмена</p>}
+                {copied && <p className="text-sm text-green-600">✓ Скопировано в буфер обмена</p>}
               </div>
             )}
           </div>
@@ -825,16 +825,6 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             border: '3px solid #000000',
             borderRadius: '12px'
           }}>
-            <div className="flex items-center justify-between z-10 relative">
-              <div className="text-lg">
-                {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
-                  <img src={config.emoji} alt="Icon" className="w-6 h-6 object-cover rounded" />
-                ) : (
-                  config.emoji
-                )}
-              </div>
-              <div className="text-sm">{config.title}</div>
-            </div>
             <div className="flex items-center justify-between z-10 relative">
               <div className="text-lg">
                 {config.emoji.startsWith('http') || config.emoji.startsWith('data:') ? (
