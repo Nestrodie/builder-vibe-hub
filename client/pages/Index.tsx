@@ -903,6 +903,15 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
 
+  // Показать конфетти сразу если цель уже достигнута
+  useEffect(() => {
+    if (config.type === 'habit' && localCurrent >= (config.goal || 2) && localCurrent > 0) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [config.type, localCurrent, config.goal]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
