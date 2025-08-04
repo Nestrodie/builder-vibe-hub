@@ -49,7 +49,7 @@ const blockTypes = [
     name: "Блок привычек/целей",
     description: "Формируйте полезные привычки день за днем",
     color: "#10b981",
-    emoji: "���",
+    emoji: "�����",
   },
   {
     id: "countdown",
@@ -163,7 +163,7 @@ export default function Index() {
       setConfig((prev) => ({
         ...prev,
         type: selectedBlock,
-        // Убрали emoji: selectedType.emoji чтобы сохранять пользовательские изображения
+        // Убрали emoji: selectedType.emoji чтобы сохранять польз��вательские изображения
       }));
     }
   }, [selectedBlock]);
@@ -1063,15 +1063,6 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
             )}
           </div>
         );
-
-      // Показать конфетти сразу если цель уже достигнута
-      useEffect(() => {
-        if (config.type === 'habit' && localCurrent >= (config.goal || 2) && localCurrent > 0) {
-          setShowConfetti(true);
-          const timer = setTimeout(() => setShowConfetti(false), 2000);
-          return () => clearTimeout(timer);
-        }
-      }, [config.type, localCurrent, config.goal]);
 
       case "countdown":
         return (
