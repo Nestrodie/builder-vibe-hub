@@ -49,7 +49,7 @@ const blockTypes = [
     name: "Блок привычек/целей",
     description: "Формируйте полезные привычки день за днем",
     color: "#10b981",
-    emoji: "������",
+    emoji: "�����",
   },
   {
     id: "countdown",
@@ -252,7 +252,7 @@ export default function Index() {
         <img
           src="https://cdn.builder.io/api/v1/image/assets%2F0d54127d0dc94e249fb368ff84555c3f%2F547e9e7c67bb4ecd9aa90069b7d1315d?format=webp&width=800"
           alt="Logo"
-          className="h-12 w-12 object-contain"
+          className="h-24 w-24 object-contain"
         />
       </div>
 
@@ -627,7 +627,7 @@ export default function Index() {
                             >
                               <option value="Count">Счетчик</option>
                               <option value="Time">Время</option>
-                              <option value="Progress">Прогресс</option>
+                              <option value="Progress">Прогр��сс</option>
                             </select>
                             <input
                               type="number"
