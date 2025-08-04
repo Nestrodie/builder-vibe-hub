@@ -61,7 +61,7 @@ const blockTypes = [
   {
     id: "progress",
     name: "Блок прогресса",
-    description: "Отслеживайте прогресс �� достижению целей",
+    description: "Отслеживайте прогресс ���� достижению целей",
     color: "#10b981",
     emoji: "📊",
   },
@@ -254,11 +254,14 @@ export default function Index() {
           alt="Logo"
           className="h-24 w-24 object-contain"
           style={{
-            border: 'none',
-            outline: 'none',
-            boxShadow: 'none',
-            filter: 'none',
-            colorScheme: 'normal'
+            border: 'none !important',
+            outline: 'none !important',
+            boxShadow: 'none !important',
+            filter: 'none !important',
+            colorScheme: 'light !important',
+            WebkitFilter: 'none !important',
+            backgroundColor: 'transparent !important',
+            borderRadius: '0 !important'
           }}
         />
       </div>
