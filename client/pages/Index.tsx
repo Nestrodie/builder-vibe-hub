@@ -254,14 +254,14 @@ export default function Index() {
           alt="Logo"
           className="h-24 w-24 object-contain"
           style={{
-            border: 'none !important',
-            outline: 'none !important',
-            boxShadow: 'none !important',
-            filter: 'none !important',
-            colorScheme: 'light !important',
-            WebkitFilter: 'none !important',
-            backgroundColor: 'transparent !important',
-            borderRadius: '0 !important'
+            border: "none !important",
+            outline: "none !important",
+            boxShadow: "none !important",
+            filter: "none !important",
+            colorScheme: "light !important",
+            WebkitFilter: "none !important",
+            backgroundColor: "transparent !important",
+            borderRadius: "0 !important",
           }}
         />
       </div>
@@ -901,7 +901,6 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState((config.countdownMinutes || 2) * 60);
 
-
   useEffect(() => {
     setTimeLeft((config.countdownMinutes || 2) * 60 + (config.seconds || 0));
   }, [config.countdownMinutes, config.seconds]);
@@ -921,8 +920,6 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
     }
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
-
-
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
