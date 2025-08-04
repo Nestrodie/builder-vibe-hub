@@ -49,7 +49,7 @@ const blockTypes = [
     name: "Блок привычек/целей",
     description: "Формируйте полезные привычки день за днем",
     color: "#10b981",
-    emoji: "�����",
+    emoji: "������",
   },
   {
     id: "countdown",
@@ -247,6 +247,15 @@ export default function Index() {
         isDarkMode ? "bg-gray-900" : "bg-gray-50"
       }`}
     >
+      {/* Logo */}
+      <div className="fixed top-4 left-4 z-50">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets%2F0d54127d0dc94e249fb368ff84555c3f%2F547e9e7c67bb4ecd9aa90069b7d1315d?format=webp&width=800"
+          alt="Logo"
+          className="h-12 w-12 object-contain"
+        />
+      </div>
+
       {/* Theme Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <button
@@ -881,7 +890,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
   const [localCurrent, setLocalCurrent] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState((config.countdownMinutes || 2) * 60);
-  const [showConfetti, setShowConfetti] = useState(false);
+
 
   useEffect(() => {
     setTimeLeft((config.countdownMinutes || 2) * 60 + (config.seconds || 0));
@@ -903,14 +912,7 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
 
-  // Показать конфетти сразу если цель уже достигнута
-  useEffect(() => {
-    if (config.type === 'habit' && localCurrent >= (config.goal || 2) && localCurrent > 0) {
-      setShowConfetti(true);
-      const timer = setTimeout(() => setShowConfetti(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [config.type, localCurrent, config.goal]);
+
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -1021,46 +1023,14 @@ function BlockPreview({ config, currentTime }: BlockPreviewProps) {
                 <Minus className="w-2.5 h-2.5 text-black opacity-70" />
               </button>
               <button
-                onClick={() => {
-                  const newValue = localCurrent + (config.increaseBy || 1);
-                  setLocalCurrent(newValue);
-                  // Показать конфетти при достижении цели
-                  if (newValue >= (config.goal || 2) && localCurrent < (config.goal || 2)) {
-                    setShowConfetti(true);
-                    setTimeout(() => setShowConfetti(false), 3000);
-                  }
-                }}
+                onClick={() =>
+                  setLocalCurrent(localCurrent + (config.increaseBy || 1))
+                }
                 className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 bg-black bg-opacity-85 hover:bg-opacity-95 shadow-lg"
               >
                 <Plus className="w-3.5 h-3.5 text-white" />
               </button>
             </div>
-
-            {/* Конфетти анимация */}
-            {showConfetti && (
-              <div className="absolute inset-0 pointer-events-none z-20">
-                {[...Array(20)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute animate-bounce"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 0.5}s`,
-                      animationDuration: `${0.8 + Math.random() * 0.4}s`,
-                    }}
-                  >
-                    <div
-                      className="w-2 h-2 rounded-full animate-spin"
-                      style={{
-                        backgroundColor: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'][Math.floor(Math.random() * 7)],
-                        animationDuration: `${0.5 + Math.random() * 0.5}s`
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         );
 
